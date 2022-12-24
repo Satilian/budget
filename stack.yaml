@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  database:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1zad2bulki
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  redis:
+    image: redis
+
+  back:
+    image: golang
+    working_dir: /usr/src/app/main
+    volumes:
+      - ./back:/usr/src/app
+    ports:
+      - 8080:8080
+    command: sh -c "go mod download && go install github.com/canthefason/go-watcher/cmd/watcher && /go/bin/watcher"

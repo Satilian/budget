@@ -1,19 +1,22 @@
 version: '3.7'
 
 services:
-  database:
-    image: mysql
+  db:
+    image: postgres
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 1zad2bulki
+      POSTGRES_PASSWORD: 1zad2bulki
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
 
   redis:
     image: redis
 
   back:
     image: golang
-    working_dir: /usr/src/app/main
+    working_dir: /usr/src/app
     volumes:
       - ./back:/usr/src/app
     ports:

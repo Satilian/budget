@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:intl/intl.dart';
+
+import 'api/auth/auth.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({Key? key}) : super(key: key);
@@ -21,10 +22,15 @@ class _SignupFormState extends State<SignupForm> {
   bool _loginHasError = false;
   bool _passHasError = false;
   bool _passIsVisible = false;
+  final authRepository = AuthRepository();
 
   var genderOptions = ['Male', 'Female', 'Other'];
 
-  void _onChanged(dynamic val) => debugPrint(val.toString());
+  void _onSubmit(Map<String, dynamic> val) {
+    debugPrint(val.toString());
+    var res = authRepository.signup(SignupData.fromJson(val));
+    res.then((value) => debugPrint(value.body));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +43,10 @@ class _SignupFormState extends State<SignupForm> {
             children: <Widget>[
               FormBuilder(
                 key: _formKey,
-                onChanged: () {
-                  _formKey.currentState!.save();
-                  debugPrint(_formKey.currentState!.value.toString());
+                initialValue: const {
+                  'email': '',
+                  'login': '',
+                  'pass': '',
                 },
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
@@ -97,15 +104,23 @@ class _SignupFormState extends State<SignupForm> {
                       autovalidateMode: AutovalidateMode.always,
                       name: 'pass',
                       decoration: InputDecoration(
-                        labelText: 'Password',
-                        suffixIcon: _passIsVisible
-                            ? Icon(Icons.visibility,
-                                color:
-                                    _passHasError ? Colors.red : Colors.green)
-                            : Icon(Icons.visibility_off,
-                                color:
-                                    _passHasError ? Colors.red : Colors.green),
-                      ),
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                            icon: _passIsVisible
+                                ? Icon(Icons.visibility,
+                                    color: _passHasError
+                                        ? Colors.red
+                                        : Colors.green)
+                                : Icon(Icons.visibility_off,
+                                    color: _passHasError
+                                        ? Colors.red
+                                        : Colors.green),
+                            onPressed: () {
+                              setState(() {
+                                _passIsVisible = !_passIsVisible;
+                              });
+                            },
+                          )),
                       onChanged: (val) {
                         setState(() {
                           _passHasError = !(_formKey
@@ -117,7 +132,7 @@ class _SignupFormState extends State<SignupForm> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
                       ]),
-                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: !_passIsVisible,
                       textInputAction: TextInputAction.next,
                     ),
                   ],
@@ -130,6 +145,8 @@ class _SignupFormState extends State<SignupForm> {
                       onPressed: () {
                         if (_formKey.currentState?.saveAndValidate() ?? false) {
                           debugPrint(_formKey.currentState?.value.toString());
+
+                          _onSubmit(_formKey.currentState!.value);
                         } else {
                           debugPrint(_formKey.currentState?.value.toString());
                           debugPrint('validation failed');

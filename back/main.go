@@ -2,17 +2,65 @@ package main
 
 import (
 	"back/greetings"
+	"crypto/tls"
+	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
+type SignupData struct {
+	Email string `from:"email"`
+	Login string `from:"login"`
+	Pass  string `from:"pass"`
+}
+
+var html = template.Must(template.New("https").Parse(`
+<html>
+<head>
+  <title>Https Test</title>
+  <script src="/assets/app.js"></script>
+</head>
+<body>
+  <h1 style="color:red;">Welcome, Ginner!</h1>
+</body>
+</html>
+`))
+
 func setupRouter() *gin.Engine {
 	r := gin.Default()
+	r.SetHTMLTemplate(html)
+	r.Static("/assets", "./assets")
 
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, greetings.Hello("Max"))
+		if pusher := c.Writer.Pusher(); pusher != nil {
+			if err := pusher.Push("/assets/app.js", nil); err != nil {
+				log.Printf("Failed to push: %v", err)
+			}
+		}
+
+		c.HTML(200, "https", gin.H{
+			"status": "success",
+		})
+	})
+
+	r.GET("/hello", func(c *gin.Context) {
+		c.String(http.StatusOK, greetings.Hello("Satilian"))
+	})
+
+	r.POST("/signup", func(c *gin.Context) {
+		var signupData SignupData
+
+		if c.ShouldBind(&signupData) == nil {
+			log.Println(signupData.Email)
+			log.Println(signupData.Login)
+			log.Println(signupData.Pass)
+		}
+
+		c.String(http.StatusOK, signupData.Login)
 	})
 
 	r.GET("/factorial", func(c *gin.Context) {
@@ -45,5 +93,15 @@ func setupRouter() *gin.Engine {
 
 func main() {
 	r := setupRouter()
-	r.Run()
+	cert, _ := tls.LoadX509KeyPair("ssl/budget_local.crt", "ssl/budget_local.key")
+
+	s := &http.Server{
+		Addr:      ":8080",
+		Handler:   r,
+		TLSConfig: &tls.Config{Certificates: []tls.Certificate{cert}},
+	}
+
+	if err := s.ListenAndServeTLS("", ""); err != nil {
+		fmt.Println(err)
+	}
 }

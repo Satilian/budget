@@ -17,6 +17,10 @@ func AddRoutes(rg *gin.RouterGroup) {
 		c.String(http.StatusOK, greetings.Hello("Satilian"))
 	})
 
+	rg.GET("/migrate", func(c *gin.Context) {
+		c.String(http.StatusOK, migrate())
+	})
+
 	rg.GET("/factorial", func(c *gin.Context) {
 		type Param struct {
 			F int `form:"f" binding:"required"`

@@ -5,9 +5,13 @@ import (
 	"crypto/tls"
 	"fmt"
 	"net/http"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	godotenv.Load(".env")
+
 	r := app.SetupRouter()
 
 	cert, _ := tls.LoadX509KeyPair("ssl/budget_local.crt", "ssl/budget_local.key")

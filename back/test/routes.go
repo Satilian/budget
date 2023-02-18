@@ -14,7 +14,16 @@ func AddRoutes(rg *gin.RouterGroup) {
 	})
 
 	rg.GET("/hello", func(c *gin.Context) {
-		c.String(http.StatusOK, greetings.Hello("Satilian"))
+		type HelloData struct {
+			Name string `form:"name"`
+			Age  int    `form:"age"`
+		}
+
+		var helloData HelloData
+
+		if c.ShouldBind(&helloData) == nil {
+			c.String(http.StatusOK, greetings.Hello(helloData.Name, helloData.Age))
+		}
 	})
 
 	rg.GET("/migrate", func(c *gin.Context) {
@@ -22,10 +31,6 @@ func AddRoutes(rg *gin.RouterGroup) {
 	})
 
 	rg.GET("/factorial", func(c *gin.Context) {
-		type Param struct {
-			F int `form:"f" binding:"required"`
-		}
-
 		i, err := strconv.Atoi(c.Query("f"))
 		if err != nil {
 			c.String(http.StatusInternalServerError, err.Error())

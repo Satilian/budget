@@ -7,6 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Добавляет роуты для аутентикации
+//
+// Принимает в качестве аргументя группу (gin.Engine.Group)
 func AddRoutes(rg *gin.RouterGroup) {
 	rg.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "pong")

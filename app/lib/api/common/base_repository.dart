@@ -1,13 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 
 import '../../common/common.dart';
 import 'base_api_error.dart';
 import 'base_entity.dart';
-import 'error_helper.dart';
 import 'typedefs.dart';
 
 typedef ResultFactoryType<T> = T Function(Map<String, dynamic> json);
@@ -20,8 +19,12 @@ final _voidType = _getType<void>();
 
 abstract class BaseRepository {
   static String? accessToken;
-  static String? refreshToken;
   static bool _initialized = false;
+
+  static HttpClient client = HttpClient()
+    ..badCertificateCallback = ((X509Certificate cert, String host, int port) =>
+        host == Constants.apiHost);
+
   final defaultHeaders = <String, String>{
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -34,9 +37,6 @@ abstract class BaseRepository {
       storage
           .read(key: "accessToken")
           .then((value) => BaseRepository.accessToken = value);
-      storage
-          .read(key: "refreshToken")
-          .then((value) => BaseRepository.refreshToken = value);
       _initialized = true;
     }
   }
@@ -45,33 +45,38 @@ abstract class BaseRepository {
     return Uri.parse('${Constants.apiUrl}$urlPart');
   }
 
-  Map<String, String> getHeaders(Map<String, String>? appendHeaders) {
-    return appendHeaders != null
-        ? (<String, String>{}
-          ..addEntries(defaultHeaders.entries)
-          ..addEntries(appendHeaders.entries))
-        : defaultHeaders;
+  setHeaders(
+    HttpClientRequest request,
+    Map<String, String>? appendHeaders,
+  ) {
+    defaultHeaders.forEach((name, value) {
+      request.headers.add(name, value);
+    });
+    appendHeaders?.forEach((name, value) {
+      request.headers.add(name, value);
+    });
   }
 
   String requestFactory<TReq extends BaseEntity>(TReq requestBody) {
     return jsonEncode(requestBody.toJson());
   }
 
-  BaseApiError errorFactory(http.Response response) {
+  BaseApiError errorFactory() {
     var message = unknownError;
-    if (response.body.startsWith('{')) {
-      return resolveErrorMessage(jsonDecode(response.body));
-    }
 
     return BaseApiError(message);
   }
 
   Future<TRes> fetch<TReq, TRes>(
-      HttpMethod method, String url, ResultFactoryType<TRes> resultFactory,
-      {TReq? request,
-      Map<String, String>? headers,
-      RequestFactoryType<TReq>? requestFactory}) async {
+    HttpMethod method,
+    String url,
+    ResultFactoryType<TRes> resultFactory, {
+    TReq? request,
+    Map<String, String>? headers,
+    RequestFactoryType<TReq>? requestFactory,
+  }) async {
     final String? body;
+
     if (request != null) {
       if (requestFactory != null) {
         body = requestFactory(request);
@@ -87,43 +92,46 @@ abstract class BaseRepository {
       body = null;
     }
 
-    http.Response res;
+    HttpClientRequest? req;
     switch (method) {
       case HttpMethod.get:
-        res = await http.get(getUrl(url), headers: getHeaders(headers));
+        req = await client.getUrl(getUrl(url));
         break;
       case HttpMethod.post:
-        res = await http.post(getUrl(url),
-            headers: getHeaders(headers), body: body);
+        req = await client.postUrl(getUrl(url));
         break;
       case HttpMethod.delete:
-        res = await http.delete(getUrl(url),
-            headers: getHeaders(headers), body: body);
+        req = await client.deleteUrl(getUrl(url));
         break;
       case HttpMethod.put:
-        res = await http.put(getUrl(url),
-            headers: getHeaders(headers), body: body);
+        req = await client.putUrl(getUrl(url));
         break;
       case HttpMethod.patch:
-        res = await http.patch(getUrl(url),
-            headers: getHeaders(headers), body: body);
+        req = await client.patchUrl(getUrl(url));
         break;
+      default:
+        req = null;
     }
 
-    if (res.statusCode >= 200 && res.statusCode < 300) {
+    HttpClientResponse? res;
+    if (req != null) {
+      setHeaders(req, headers);
+      if (body != null) req.add(utf8.encode(body));
+      res = await req.close();
+    } else {
+      res = null;
+    }
+
+    if (res != null && res.statusCode >= 200 && res.statusCode < 300) {
       if (TRes == _voidType) {
-        final data = resultFactory({});
-
-        return data;
+        return resultFactory({});
       } else {
-        final Map<String, dynamic> dataMap = jsonDecode(res.body);
-        final data = resultFactory(dataMap);
-
-        return data;
+        return resultFactory(
+            jsonDecode(await res.transform(utf8.decoder).join()));
       }
     } else {
-      debugPrint('raw error text: ${res.body}');
-      throw errorFactory(res);
+      debugPrint('raw error text: ${res?.statusCode}');
+      throw errorFactory();
     }
   }
 }

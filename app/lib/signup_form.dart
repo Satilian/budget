@@ -27,9 +27,7 @@ class _SignupFormState extends State<SignupForm> {
   var genderOptions = ['Male', 'Female', 'Other'];
 
   void _onSubmit(Map<String, dynamic> val) {
-    debugPrint(val.toString());
-    var res = authRepository.signup(SignupData.fromJson(val));
-    res.then((value) => debugPrint(value.body));
+    authRepository.signup(SignupData.fromJson(val));
   }
 
   @override
@@ -144,8 +142,6 @@ class _SignupFormState extends State<SignupForm> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.saveAndValidate() ?? false) {
-                          debugPrint(_formKey.currentState?.value.toString());
-
                           _onSubmit(_formKey.currentState!.value);
                         } else {
                           debugPrint(_formKey.currentState?.value.toString());

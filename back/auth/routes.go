@@ -16,13 +16,7 @@ func AddRoutes(rg *gin.RouterGroup) {
 	})
 
 	rg.POST("/signup", func(c *gin.Context) {
-		type SignupData struct {
-			Email string `from:"email"`
-			Login string `from:"login"`
-			Pass  string `from:"pass"`
-		}
-
-		var signupData SignupData
+		var signupData SignupDto
 
 		if c.ShouldBind(&signupData) == nil {
 			log.Println(signupData.Email)
@@ -30,6 +24,6 @@ func AddRoutes(rg *gin.RouterGroup) {
 			log.Println(signupData.Pass)
 		}
 
-		c.String(http.StatusOK, signupData.Login)
+		c.String(http.StatusOK, signup(&signupData))
 	})
 }

@@ -26,10 +26,6 @@ func AddRoutes(rg *gin.RouterGroup) {
 		}
 	})
 
-	rg.GET("/migrate", func(c *gin.Context) {
-		c.String(http.StatusOK, migrate())
-	})
-
 	rg.GET("/factorial", func(c *gin.Context) {
 		i, err := strconv.Atoi(c.Query("f"))
 		if err != nil {

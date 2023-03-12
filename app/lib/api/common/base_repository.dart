@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../common/common.dart';
 import 'base_api_error.dart';
 import 'base_entity.dart';
 import 'typedefs.dart';
@@ -17,13 +17,15 @@ enum HttpMethod { get, post, put, patch, delete }
 Type _getType<T>() => T;
 final _voidType = _getType<void>();
 
+final String apiUrl = 'https://${dotenv.env['API_HOST']}:${dotenv.env['API_PORT']}/';
+
 abstract class BaseRepository {
   static String? accessToken;
   static bool _initialized = false;
 
   static HttpClient client = HttpClient()
     ..badCertificateCallback = ((X509Certificate cert, String host, int port) =>
-        host == Constants.apiHost);
+        host == dotenv.env['API_HOST']);
 
   final defaultHeaders = <String, String>{
     'Accept': 'application/json',
@@ -42,7 +44,7 @@ abstract class BaseRepository {
   }
 
   Uri getUrl(String urlPart) {
-    return Uri.parse('${Constants.apiUrl}$urlPart');
+    return Uri.parse('$apiUrl$urlPart');
   }
 
   setHeaders(

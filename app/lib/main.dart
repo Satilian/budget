@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'signup_form.dart';
+import 'home_screen.dart';
 
 void main() async {
   await dotenv.load();
@@ -19,9 +19,13 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
+        scaffoldBackgroundColor: const Color(0xFF212832),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Color(0xFBEFF2DB)),
+        ),
       ),
-      home: const SignupForm(),
+      home: const HomeScreen(),
     );
   }
 }

@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 1zad2bulki
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./images/golang
+    ports:
+      - 8080:8080
+    volumes:
+      - ../../back:/app
+    command: sh -c "go mod download && go mod verify && go run main.go"
+
+volumes:
+  db:

@@ -54,8 +54,14 @@ class _SignupFormState extends State<SignupForm> {
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
                       name: 'email',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                       decoration: InputDecoration(
                         labelText: 'Email',
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         suffixIcon: _emailHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -78,8 +84,14 @@ class _SignupFormState extends State<SignupForm> {
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
                       name: 'login',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                       decoration: InputDecoration(
                         labelText: 'Login',
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         suffixIcon: _loginHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -101,24 +113,30 @@ class _SignupFormState extends State<SignupForm> {
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
                       name: 'pass',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                       decoration: InputDecoration(
-                          labelText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: _passIsVisible
-                                ? Icon(Icons.visibility,
-                                    color: _passHasError
-                                        ? Colors.red
-                                        : Colors.green)
-                                : Icon(Icons.visibility_off,
-                                    color: _passHasError
-                                        ? Colors.red
-                                        : Colors.green),
-                            onPressed: () {
-                              setState(() {
-                                _passIsVisible = !_passIsVisible;
-                              });
-                            },
-                          )),
+                        labelText: 'Password',
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: _passIsVisible
+                              ? Icon(Icons.visibility,
+                                  color:
+                                      _passHasError ? Colors.red : Colors.green)
+                              : Icon(Icons.visibility_off,
+                                  color: _passHasError
+                                      ? Colors.red
+                                      : Colors.green),
+                          onPressed: () {
+                            setState(() {
+                              _passIsVisible = !_passIsVisible;
+                            });
+                          },
+                        ),
+                      ),
                       onChanged: (val) {
                         setState(() {
                           _passHasError = !(_formKey
@@ -163,7 +181,8 @@ class _SignupFormState extends State<SignupForm> {
                       child: Text(
                         'Reset',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                     ),
                   ),

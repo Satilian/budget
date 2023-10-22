@@ -8,5 +8,5 @@ func factorial(n int) string {
 	for i := 1; i <= n; i++ {
 		result *= i
 	}
-	return fmt.Sprintf("%v", result)
+	return fmt.Sprintf("factorial: %v", result)
 }

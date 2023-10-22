@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'signup_form.dart';
 
 void main() async {
-  // await dotenv.load();
+  await dotenv.load();
   runApp(const MyApp());
 }
 

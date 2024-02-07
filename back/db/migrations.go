@@ -1,7 +1,7 @@
 package db
 
-import "back/auth"
+import "back/models"
 
 func autoMigrate() {
-	DB.AutoMigrate(&auth.User{})
+	DB.AutoMigrate(&models.User{})
 }

@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"back/models"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +18,7 @@ func AddRoutes(rg *gin.RouterGroup) {
 	})
 
 	rg.POST("/signup", func(c *gin.Context) {
-		var signupData SignupDto
+		var signupData models.SignupDto
 
 		if c.ShouldBind(&signupData) == nil {
 			log.Println(signupData.Email)

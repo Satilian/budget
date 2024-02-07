@@ -8,14 +8,14 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  flutter_form_builder: ^9.1.0
+  flutter_form_builder: 9.1.0
   form_builder_validators: ^9.0.0
   http: ^0.13.5
   flutter_secure_storage: ^6.1.0
   json_annotation: ^4.7.0
   intl: ^0.18.0
   json_serializable: ^6.5.4
-  flutter_dotenv: ^5.0.2
+  flutter_dotenv: ^5.1.0
   flutter_svg: ^2.0.4
 dev_dependencies:
   flutter_test:
@@ -28,3 +28,4 @@ flutter:
 
   assets:
     - assets/
+    - .env

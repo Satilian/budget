@@ -13,7 +13,6 @@
     "validation_passwords_match": "Passwords must match",
     "validation_accept_rules": "To complete the registration, you must agree to the terms and conditions of FC\u00A0”Spartak”",
     "validation_code_incomplete": "Verification code should have 4 digits",
-    "validation_invalid_phone": "Example -> 79871234567",
     "onboarding_skip": "Skip",
     "onboarding_continue": "Continue",
     "onboarding_1_title": "Welcome to FC\u00A0“Спартак”",

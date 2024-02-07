@@ -13,7 +13,6 @@
     "validation_passwords_match": "Пароли должны совпадать",
     "validation_accept_rules": "Для завершения регистрации необходимо согласиться с правилами и условиями ФК\u00A0”Спартак”",
     "validation_code_incomplete": "Код проверки должен содержать 4 цифры",
-    "validation_invalid_phone": "Пример -> 79871234567",
     "onboarding_skip": "Пропустить",
     "onboarding_continue": "Продолжить",
     "onboarding_1_title": "Добро пожаловать в ФК\u00A0“Спартак”",

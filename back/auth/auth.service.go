@@ -1,24 +1,27 @@
 package auth
 
 import (
-	"back/db"
+	"back/dic"
 	"back/models"
 	"log"
+
+	"gorm.io/gorm"
 )
 
-func signup(signupData *models.SignupDto) string {
+func signup(signupData *models.SignupDto) models.User {
 	user := models.User{
 		Login:    signupData.Login,
 		Email:    signupData.Email,
 		Password: signupData.Pass,
 	}
-	result := db.DB.Create(&user)
+	repo := dic.Instance.Get("DB").(*gorm.DB)
+	result := repo.Create(&user)
 
-	log.Println(user.Email)
+	log.Println(user.ID)
 
 	if result.Error != nil {
 		log.Fatal("Create User Error")
 	}
 
-	return user.Login
+	return user
 }

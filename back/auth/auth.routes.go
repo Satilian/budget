@@ -26,6 +26,6 @@ func AddRoutes(rg *gin.RouterGroup) {
 			log.Println(signupData.Pass)
 		}
 
-		c.String(http.StatusOK, signup(&signupData))
+		c.JSON(200, signup(&signupData))
 	})
 }

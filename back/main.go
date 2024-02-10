@@ -2,11 +2,11 @@ package main
 
 import (
 	"back/app"
-	"back/db"
+	"back/dic"
 )
 
 func main() {
 	app.LoadEnv()
-	db.DbConnect()
+	dic.Init()
 	app.Serv(app.SetupRouter())
 }

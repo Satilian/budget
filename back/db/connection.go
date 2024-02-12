@@ -1,15 +1,15 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	_ "github.com/lib/pq"
 )
 
 // NewDB - Get gorm DB instance.
-func NewDB() (*gorm.DB, error) {
+func NewDB() (*sql.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%v user=%v password=%v dbname=%v port=%v sslmode=disable",
 		os.Getenv("DB_HOST"),
@@ -19,5 +19,5 @@ func NewDB() (*gorm.DB, error) {
 		os.Getenv("DB_PORT"),
 	)
 
-	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	return sql.Open("postgres", dsn)
 }

@@ -2,9 +2,9 @@ package dic
 
 import (
 	"back/db"
+	"database/sql"
 
 	"github.com/sarulabs/di"
-	"gorm.io/gorm"
 )
 
 func getDbDef() di.Def {
@@ -12,16 +12,12 @@ func getDbDef() di.Def {
 		Name:  "DB",
 		Scope: di.App,
 		Build: func(ctn di.Container) (interface{}, error) {
-			obj, err := db.NewDB()
+			dataSource, err := db.NewDB()
 
-			return &obj, err
+			return dataSource, err
 		},
-		Close: func(obj interface{}) error {
-			if DB, err := obj.(*gorm.DB).DB(); err == nil {
-				return DB.Close()
-			} else {
-				return err
-			}
+		Close: func(dataSource interface{}) error {
+			return dataSource.(*sql.DB).Close()
 		},
 	}
 }

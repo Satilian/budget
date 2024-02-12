@@ -3,25 +3,25 @@ package auth
 import (
 	"back/dic"
 	"back/models"
+	"database/sql"
 	"log"
-
-	"gorm.io/gorm"
 )
 
-func signup(signupData *models.SignupDto) models.User {
-	user := models.User{
-		Login:    signupData.Login,
-		Email:    signupData.Email,
-		Password: signupData.Pass,
+func signup(signupData *models.SignupDto) models.UserDto {
+	user := models.UserDto{
+		Login: signupData.Login,
+		Email: signupData.Email,
 	}
-	repo := dic.Instance.Get("DB").(*gorm.DB)
-	result := repo.Create(&user)
+	dataSource := dic.Instance.Get("DB").(*sql.DB)
 
-	log.Println(user.ID)
+	err := dataSource.QueryRow("insert into Users (login, email, password) values ($1, $2. %3) returning id, created_at",
+		"Huawei", 35000).Scan(&user.ID, &user.CreatedAt)
 
-	if result.Error != nil {
+	if err != nil {
 		log.Fatal("Create User Error")
 	}
+
+	log.Println(user.ID)
 
 	return user
 }

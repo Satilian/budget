@@ -23,7 +23,7 @@ func AddRoutes(rg *gin.RouterGroup) {
 		if c.ShouldBind(&signupData) == nil {
 			log.Println(signupData.Email)
 			log.Println(signupData.Login)
-			log.Println(signupData.Pass)
+			log.Println(signupData.Password)
 		}
 
 		c.JSON(200, signup(&signupData))

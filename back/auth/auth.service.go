@@ -28,3 +28,23 @@ func signup(signupData *models.SignupDto) (models.UserDto, error) {
 
 	return user, err
 }
+
+func signin(signinData *models.SigninDto) (models.JwtDto, error) {
+	response := models.JwtDto{}
+	var hashedPassword string
+
+	dataSource := dic.Instance.Get("DB").(*sql.DB)
+	dataSource.QueryRow("SELECT password FROM public.users WHERE login=$1", signinData.Login).Scan(&hashedPassword)
+
+	candidatePassword, err := HashPassword(signinData.Password)
+	err = VerifyPassword(hashedPassword, candidatePassword)
+
+	var jwt string
+	jwt, err = GenerateToken(map[string]string{"login": signinData.Login})
+
+	if err == nil {
+		response.Jwt = jwt
+	}
+
+	return response, err
+}

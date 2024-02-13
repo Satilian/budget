@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"log"
 	"net/http"
 
 	"back/models"
@@ -22,14 +21,24 @@ func AddRoutes(rg *gin.RouterGroup) {
 
 		if err := c.BindJSON(&signupData); err != nil {
 			c.Error(err)
-		} else {
-			log.Println(signupData.Email)
-			log.Println(signupData.Login)
-			log.Println(signupData.Password)
 		}
 
 		if newUser, err := signup(&signupData); err == nil {
 			c.JSON(200, newUser)
+		} else {
+			c.Error(err)
+		}
+	})
+
+	rg.POST("/signin", func(c *gin.Context) {
+		var signinData models.SigninDto
+
+		if err := c.BindJSON(&signinData); err != nil {
+			c.Error(err)
+		}
+
+		if response, err := signin(&signinData); err == nil {
+			c.JSON(200, response)
 		} else {
 			c.Error(err)
 		}

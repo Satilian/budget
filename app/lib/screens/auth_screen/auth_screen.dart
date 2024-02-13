@@ -1,4 +1,4 @@
-import 'package:budget/screens/login_screen/signup_form.dart';
+import 'package:budget/screens/auth_screen/signup_form.dart';
 import 'package:flutter/material.dart';
 
 import '../../api/api.dart';

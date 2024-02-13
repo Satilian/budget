@@ -22,14 +22,14 @@ func VerifyPassword(hashedPassword string, candidatePassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(candidatePassword))
 }
 
-func GenerateToken(ttl time.Duration, payload interface{}) (string, error) {
+func GenerateToken(payload interface{}) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	now := time.Now().UTC()
 	claims := token.Claims.(jwt.MapClaims)
 
 	claims["sub"] = payload
-	claims["exp"] = now.Add(ttl).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	claims["iat"] = now.Unix()
 	claims["nbf"] = now.Unix()
 

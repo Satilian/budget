@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -24,6 +25,13 @@ abstract class BaseRepository {
   static String? accessToken;
   static bool _initialized = false;
 
+  static setAccessToken(value) {
+    const storage = FlutterSecureStorage();
+
+    storage.write(key: 'accessToken', value: value);
+    BaseRepository.accessToken = value;
+  }
+
   static HttpClient client = HttpClient()
     ..badCertificateCallback = ((X509Certificate cert, String host, int port) =>
         host == dotenv.env['API_HOST']);
@@ -39,7 +47,7 @@ abstract class BaseRepository {
 
       storage
           .read(key: "accessToken")
-          .then((value) => BaseRepository.accessToken = value);
+          .then((value) => BaseRepository.setAccessToken(value));
       _initialized = true;
     }
   }

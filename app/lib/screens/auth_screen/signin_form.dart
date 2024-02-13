@@ -24,12 +24,15 @@ class _SigninFormState extends State<SigninForm> {
   bool _passHasError = false;
   bool _passIsVisible = false;
 
-  void _onSubmit(Map<String, dynamic> val) async {
-    try {
-      await widget.authRepository.signin(SigninData.fromJson(val));
-    } catch (err) {
-      debugPrint('Signin request failed: $err');
-    }
+  void _onSubmit(Map<String, dynamic> val) {
+    widget.authRepository.signin(SigninData.fromJson(val)).then((value) {
+      BaseRepository.setAccessToken(value.jwt);
+      const snackBar = SnackBar(content: Text('Signin complet'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }).catchError((err) {
+      var snackBar = SnackBar(content: Text('Signin request failed: $err'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
   }
 
   @override

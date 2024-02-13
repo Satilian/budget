@@ -20,12 +20,18 @@ func AddRoutes(rg *gin.RouterGroup) {
 	rg.POST("/signup", func(c *gin.Context) {
 		var signupData models.SignupDto
 
-		if c.ShouldBind(&signupData) == nil {
+		if err := c.BindJSON(&signupData); err != nil {
+			c.Error(err)
+		} else {
 			log.Println(signupData.Email)
 			log.Println(signupData.Login)
 			log.Println(signupData.Password)
 		}
 
-		c.JSON(200, signup(&signupData))
+		if newUser, err := signup(&signupData); err == nil {
+			c.JSON(200, newUser)
+		} else {
+			c.Error(err)
+		}
 	})
 }

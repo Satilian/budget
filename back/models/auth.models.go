@@ -8,7 +8,7 @@ import (
 
 type SigninDto struct {
 	Login    string `form:"login"`
-	Password string `form:"pass"`
+	Password string `form:"pass" json:"pass"`
 }
 
 type SignupDto struct {
@@ -23,7 +23,7 @@ type User struct {
 
 type UserDto struct {
 	ID        uuid.UUID `json:"id,omitempty"`
-	Login     string    `json:"name,omitempty"`
+	Login     string    `json:"login,omitempty"`
 	Email     string    `json:"email,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

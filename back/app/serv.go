@@ -1,10 +1,14 @@
 package app
 
 import (
+	"context"
 	"crypto/tls"
-	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +22,26 @@ func Serv(r *gin.Engine) {
 		TLSConfig: &tls.Config{Certificates: []tls.Certificate{cert}},
 	}
 
-	if err := s.ListenAndServeTLS("", ""); err != nil {
-		fmt.Println(err)
+	go func() {
+		if err := s.ListenAndServeTLS("", ""); err != nil {
+			log.Fatalf("listen: %s\n", err)
+		}
+	}()
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shutdown Server ...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := s.Shutdown(ctx); err != nil {
+		log.Fatal("Server Shutdown:", err)
 	}
+
+	select {
+	case <-ctx.Done():
+		log.Println("timeout of 5 seconds.")
+	}
+	log.Println("Server exiting")
 }

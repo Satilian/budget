@@ -4,24 +4,27 @@ import (
 	"back/dic"
 	"back/models"
 	"database/sql"
-	"log"
+	"fmt"
 )
 
-func signup(signupData *models.SignupDto) models.UserDto {
+func signup(signupData *models.SignupDto) (models.UserDto, error) {
 	user := models.UserDto{
 		Login: signupData.Login,
 		Email: signupData.Email,
 	}
-	dataSource := dic.Instance.Get("DB").(*sql.DB)
 
-	err := dataSource.QueryRow("insert into Users (login, email, password) values ($1, $2. %3) returning id, created_at",
-		"Huawei", 35000).Scan(&user.ID, &user.CreatedAt)
-
+	password, err := HashPassword(signupData.Password)
 	if err != nil {
-		log.Fatal("Create User Error")
+		return user, err
 	}
 
-	log.Println(user.ID)
+	dataSource := dic.Instance.Get("DB").(*sql.DB)
+	err = dataSource.QueryRow("insert into Users (login, email, password) values ($1, $2, $3) returning id, created_at",
+		signupData.Login, signupData.Email, password).Scan(&user.ID, &user.CreatedAt)
 
-	return user
+	if err != nil {
+		err = fmt.Errorf("can't create user %w", err)
+	}
+
+	return user, err
 }

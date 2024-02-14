@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'api/api.dart';
+import 'theme/theme.dart';
 import 'screens/screens.dart';
 
 void main() async {
@@ -19,26 +20,9 @@ class MyApp extends StatelessWidget {
       title: 'Family budget',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
-          brightness: Brightness.dark,
-        ),
-        primaryColor: Colors.white,
-        primarySwatch: Colors.green,
-        scaffoldBackgroundColor: const Color(0xFF212832),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Color(0xFBEFF2DB)),
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF212832),
-          titleTextStyle: TextStyle(
-            color: Colors.green,
-          ),
-        ),
-      ),
+      theme: theme,
       home: BaseRepository.accessToken == null
-          ? LoginScreen()
+          ? AuthScreen()
           : const HomeScreen(),
     );
   }

@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import '../../api/api.dart';
 import 'signin_form.dart';
 
-class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+class AuthScreen extends StatefulWidget {
+  AuthScreen({super.key});
 
   final authRepository = AuthRepository();
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _AuthScreenState extends State<AuthScreen> {
   bool _isLoginForm = true;
 
   @override

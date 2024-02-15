@@ -51,7 +51,7 @@ class _SigninFormState extends State<SigninForm> {
             children: <Widget>[
               const SizedBox(height: 15),
               FormBuilderTextField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 name: 'login',
                 style: TextStyle(
                   color: Theme.of(context).primaryColor,
@@ -65,13 +65,6 @@ class _SigninFormState extends State<SigninForm> {
                       ? const Icon(Icons.error, color: Colors.red)
                       : const Icon(Icons.check, color: Colors.green),
                 ),
-                onChanged: (val) {
-                  setState(() {
-                    _loginHasError =
-                        !(_formKey.currentState?.fields['login']?.validate() ??
-                            false);
-                  });
-                },
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(
                       errorText: 'Обязательное поле'),
@@ -80,7 +73,7 @@ class _SigninFormState extends State<SigninForm> {
                 textInputAction: TextInputAction.next,
               ),
               FormBuilderTextField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 name: 'pass',
                 style: TextStyle(
                   color: Theme.of(context).primaryColor,
@@ -103,13 +96,6 @@ class _SigninFormState extends State<SigninForm> {
                     },
                   ),
                 ),
-                onChanged: (val) {
-                  setState(() {
-                    _passHasError =
-                        !(_formKey.currentState?.fields['pass']?.validate() ??
-                            false);
-                  });
-                },
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(
                       errorText: 'Обязательное поле'),

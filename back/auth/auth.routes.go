@@ -24,7 +24,7 @@ func AddRoutes(rg *gin.RouterGroup) {
 		}
 
 		if newUser, err := signup(&signupData); err == nil {
-			c.JSON(200, newUser)
+			c.JSON(http.StatusOK, newUser)
 		} else {
 			c.Error(err)
 		}
@@ -38,7 +38,7 @@ func AddRoutes(rg *gin.RouterGroup) {
 		}
 
 		if response, err := signin(&signinData); err == nil {
-			c.JSON(200, response)
+			c.JSON(http.StatusOK, response)
 		} else {
 			c.Error(err)
 		}

@@ -10,7 +10,7 @@ class Modal extends StatelessWidget {
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
-        height: 400,
+        height: 300,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.background,
           boxShadow: [

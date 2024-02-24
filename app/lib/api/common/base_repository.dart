@@ -66,6 +66,7 @@ abstract class BaseRepository {
     appendHeaders?.forEach((name, value) {
       request.headers.add(name, value);
     });
+    request.headers.add('Authorization', '$accessToken');
   }
 
   String requestFactory<TReq extends BaseEntity>(TReq requestBody) {

@@ -20,12 +20,14 @@ func AddRoutes(rg *gin.RouterGroup) {
 		var signupData models.SignupDto
 
 		if err := c.BindJSON(&signupData); err != nil {
+			c.Status(http.StatusBadRequest)
 			c.Error(err)
 		}
 
 		if newUser, err := signup(&signupData); err == nil {
 			c.JSON(http.StatusOK, newUser)
 		} else {
+			c.Status(http.StatusBadRequest)
 			c.Error(err)
 		}
 	})
@@ -34,12 +36,14 @@ func AddRoutes(rg *gin.RouterGroup) {
 		var signinData models.SigninDto
 
 		if err := c.BindJSON(&signinData); err != nil {
+			c.Status(http.StatusBadRequest)
 			c.Error(err)
 		}
 
 		if response, err := signin(&signinData); err == nil {
 			c.JSON(http.StatusOK, response)
 		} else {
+			c.Status(http.StatusUnauthorized)
 			c.Error(err)
 		}
 	})

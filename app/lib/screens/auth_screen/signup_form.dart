@@ -6,8 +6,7 @@ import '../../api/api.dart';
 import 'form_buttons.dart';
 
 class SignupForm extends StatefulWidget {
-  const SignupForm({Key? key, required this.authRepository, this.goToLogin})
-      : super(key: key);
+  const SignupForm({super.key, required this.authRepository, this.goToLogin});
   final AuthRepository authRepository;
   final VoidCallback? goToLogin;
 

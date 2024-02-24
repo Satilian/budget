@@ -5,6 +5,8 @@ import (
 	"back/models"
 	"database/sql"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 func signup(signupData *models.SignupDto) (models.UserDto, error) {
@@ -32,15 +34,16 @@ func signup(signupData *models.SignupDto) (models.UserDto, error) {
 func signin(signinData *models.SigninDto) (models.JwtDto, error) {
 	response := models.JwtDto{}
 	var hashedPassword string
+	var userId uuid.UUID
 
 	dataSource := dic.Instance.Get("DB").(*sql.DB)
-	dataSource.QueryRow("SELECT password FROM public.users WHERE login=$1", signinData.Login).Scan(&hashedPassword)
+	dataSource.QueryRow("SELECT id, password FROM public.users WHERE login=$1", signinData.Login).Scan(&userId, &hashedPassword)
 
-	candidatePassword, err := HashPassword(signinData.Password)
-	err = VerifyPassword(hashedPassword, candidatePassword)
+	if err := VerifyPassword(hashedPassword, signinData.Password); err != nil {
+		return response, err
+	}
 
-	var jwt string
-	jwt, err = GenerateToken(map[string]string{"login": signinData.Login})
+	jwt, err := GenerateToken(map[string]string{"login": signinData.Login, "id": userId.String()})
 
 	if err == nil {
 		response.Jwt = jwt

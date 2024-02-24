@@ -9,9 +9,9 @@ import (
 )
 
 func addExpense(expenseData *models.AddExpenseDto) error {
-	log.Println(expenseData.Category)
-	log.Println(expenseData.Expense)
-	log.Println(expenseData.Value)
+	log.Println(fmt.Printf("Category:  %v\n", expenseData.Category))
+	log.Println(fmt.Printf("Expense:  %v\n", expenseData.Expense))
+	log.Println(fmt.Printf("Value:  %v\n", expenseData.Value))
 
 	var err error
 	expense := models.Expense{
@@ -25,7 +25,7 @@ func addExpense(expenseData *models.AddExpenseDto) error {
 		err = dataSource.QueryRow("INSERT INTO public.categories (name) VALUES($1) returning id", expenseData.Category).Scan(&expense.CategoryID)
 	}
 	if err == nil {
-		log.Println(fmt.Printf("categoryId:  %x\n", expense.CategoryID))
+		log.Println(fmt.Printf("categoryId:  %v\n", expense.CategoryID))
 	}
 
 	return err

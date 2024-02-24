@@ -9,7 +9,8 @@
       "cwd": "app",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main.dart"
+      "program": "lib/main.dart",
+      "noDebug": true
     },
     {
       "name": "app (profile mode)",

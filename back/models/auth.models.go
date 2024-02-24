@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"github.com/google/uuid"
 )
 
@@ -21,14 +19,18 @@ type User struct {
 	ID uuid.UUID
 }
 
-type UserDto struct {
-	ID        uuid.UUID `json:"id,omitempty"`
-	Login     string    `json:"login,omitempty"`
-	Email     string    `json:"email,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
 type JwtDto struct {
 	Jwt string `json:"jwt"`
+}
+
+type AccountEntity struct {
+	BaseEntity
+	Email string `json:"email,omitempty"`
+}
+
+type UserEntity struct {
+	BaseEntity
+	Login     string    `json:"login,omitempty"`
+	AccountId uuid.UUID `json:"accountId,omitempty"`
+	Password  string    `json:"password,omitempty"`
 }

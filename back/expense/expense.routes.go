@@ -3,7 +3,6 @@ package expense
 import (
 	"back/auth"
 	"back/models"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,17 +18,23 @@ func AddRoutes(rg *gin.RouterGroup) {
 
 	rg.POST("/add", func(c *gin.Context) {
 		var expenseData models.AddExpenseDto
+		claims, ok := c.Get("user")
 
-		if claims, ok := c.Get("user"); ok {
-			fmt.Println(claims.(*jwt.StandardClaims).Id)
+		if !ok {
+			c.Status(http.StatusUnauthorized)
+			c.Abort()
 		}
 
 		if err := c.BindJSON(&expenseData); err != nil {
 			c.Error(err)
 		}
 
-		if err := addExpense(&expenseData); err == nil {
-			c.Status(http.StatusNoContent)
+		if expense, err := addExpense(
+			&expenseData,
+			claims.(*jwt.StandardClaims).Id,
+			claims.(*jwt.StandardClaims).Audience,
+		); err == nil {
+			c.JSON(http.StatusOK, expense)
 		} else {
 			c.Error(err)
 		}

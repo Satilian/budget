@@ -1,7 +1,10 @@
 {
     "@@locale": "en",
+    "app_title": "Family budget",
     "auth_login_title": "Authorization",
     "auth_register_title": "Registration",
+    "auth_create_account": "Create account",
+    "auth_forgot_password": "Forgot password",
 
     "errors_unknown": "Unknown error"
 }

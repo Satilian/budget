@@ -5,15 +5,22 @@ import (
 )
 
 type AddExpenseDto struct {
-	Category string  `json:"category"`
-	Expense  string  `json:"expense"`
-	Value    float32 `json:"value"`
+	Category string  `json:"category,omitempty"`
+	Expense  string  `json:"expense,omitempty"`
+	Value    float32 `json:"value,omitempty"`
 }
 
-type Expense struct {
-	ID         uuid.UUID
-	CategoryID uuid.UUID
-	UserID     uuid.UUID
-	Name       string
-	Value      float32
+type ExpenseNameEntity struct {
+	BaseEntity
+	Name      string    `json:"name,omitempty"`
+	AccountId uuid.UUID `json:"accountId,omitempty"`
+}
+
+type ExpenseEntity struct {
+	BaseEntity
+	Value         float32   `json:"value,omitempty"`
+	UserId        uuid.UUID `json:"userId,omitempty"`
+	AccountId     uuid.UUID `json:"accountId,omitempty"`
+	CategoryId    uuid.UUID `json:"categoryId,omitempty"`
+	ExpenseNameId uuid.UUID `json:"expenseName,omitempty"`
 }

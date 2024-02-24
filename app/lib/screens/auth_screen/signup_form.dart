@@ -50,7 +50,7 @@ class _SignupFormState extends State<SignupForm> {
             children: <Widget>[
               const SizedBox(height: 15),
               FormBuilderTextField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 name: 'email',
                 style: TextStyle(
                   color: Theme.of(context).primaryColor,
@@ -79,7 +79,7 @@ class _SignupFormState extends State<SignupForm> {
                 textInputAction: TextInputAction.next,
               ),
               FormBuilderTextField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 name: 'login',
                 style: TextStyle(
                   color: Theme.of(context).primaryColor,
@@ -107,7 +107,7 @@ class _SignupFormState extends State<SignupForm> {
                 textInputAction: TextInputAction.next,
               ),
               FormBuilderTextField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 name: 'pass',
                 style: TextStyle(
                   color: Theme.of(context).primaryColor,

@@ -6,7 +6,12 @@ import '../../api/api.dart';
 import 'form_buttons.dart';
 
 class SigninForm extends StatefulWidget {
-  const SigninForm({super.key, required this.authRepository});
+  const SigninForm({
+    super.key,
+    required this.authRepository,
+    required this.setUserLoggedIn,
+  });
+  final VoidCallback setUserLoggedIn;
   final AuthRepository authRepository;
 
   @override
@@ -27,8 +32,7 @@ class _SigninFormState extends State<SigninForm> {
   void _onSubmit(Map<String, dynamic> val) {
     widget.authRepository.signin(SigninData.fromJson(val)).then((value) {
       BaseRepository.setAccessToken(value.jwt);
-      const snackBar = SnackBar(content: Text('Signin complet'));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      widget.setUserLoggedIn();
     }).catchError((err) {
       var snackBar = SnackBar(content: Text('Signin request failed: $err'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

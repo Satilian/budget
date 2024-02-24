@@ -1,7 +1,10 @@
 {
     "@@locale": "ru",
+    "app_title": "Семейный бюджет",
     "auth_login_title": "Вход",
     "auth_register_title": "Регистрация",
+    "auth_create_account": "Создать аккаунт",
+    "auth_forgot_password": "Забыли пароль",
 
     "errors_unknown": "Неизвестная ошибка"
 }

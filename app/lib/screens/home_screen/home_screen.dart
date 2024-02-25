@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../widgets/widgets.dart';
 import 'expense_form.dart';
+import 'expense_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,8 +15,23 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
         alignment: Alignment.bottomCenter,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            const SizedBox(height: 50),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(maxHeight: constraints.maxHeight),
+                      child: const ExpenseList(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

@@ -24,3 +24,9 @@ type ExpenseEntity struct {
 	CategoryId    uuid.UUID `json:"categoryId,omitempty"`
 	ExpenseNameId uuid.UUID `json:"expenseName,omitempty"`
 }
+
+type ExpenseCategoryDto struct {
+	ID    uuid.UUID `json:"id,omitempty"`
+	Name  string    `json:"name,omitempty"`
+	Value float32   `json:"value,omitempty"`
+}

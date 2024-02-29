@@ -6,5 +6,7 @@
     "auth_create_account": "Create account",
     "auth_forgot_password": "Forgot password",
 
+    "expense": "Expense",
+
     "errors_unknown": "Unknown error"
 }

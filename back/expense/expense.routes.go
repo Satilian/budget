@@ -39,4 +39,21 @@ func AddRoutes(rg *gin.RouterGroup) {
 			c.Error(err)
 		}
 	})
+
+	rg.GET("/categories", func(c *gin.Context) {
+		claims, ok := c.Get("user")
+
+		if !ok {
+			c.Status(http.StatusUnauthorized)
+			c.Abort()
+		}
+		if expense, err := getExpenseCategories(
+			claims.(*jwt.StandardClaims).Id,
+			claims.(*jwt.StandardClaims).Audience,
+		); err == nil {
+			c.JSON(http.StatusOK, gin.H{"expense": expense})
+		} else {
+			c.Error(err)
+		}
+	})
 }

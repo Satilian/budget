@@ -17,7 +17,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     const storage = FlutterSecureStorage();
     storage.read(key: "accessToken").then((value) {
-      userLoggedIn = value?.isNotEmpty ?? false;
+      setState(() {
+        userLoggedIn = value?.isNotEmpty ?? false;
+      });
     });
     super.initState();
   }
@@ -31,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return userLoggedIn
-        ? const HomeScreen()
+        ? HomeScreen()
         : AuthScreen(setUserLoggedIn: setUserLoggedIn);
   }
 }

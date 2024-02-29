@@ -9,7 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../api/api.dart';
 
 class ExpenseForm extends StatefulWidget {
-  const ExpenseForm({super.key});
+  const ExpenseForm({super.key, required this.expenseRepository});
+  final ExpenseRepository expenseRepository;
 
   @override
   State<ExpenseForm> createState() {
@@ -19,10 +20,11 @@ class ExpenseForm extends StatefulWidget {
 
 class _ExpenseFormState extends State<ExpenseForm> {
   final _formKey = GlobalKey<FormBuilderState>();
-  final expenseRepository = ExpenseRepository();
 
   void _onSubmit(Map<String, dynamic> val) {
-    expenseRepository.addExpense(AddExpenseData.fromJson(val)).then((value) {
+    widget.expenseRepository
+        .addExpense(AddExpenseData.fromJson(val))
+        .then((value) {
       const snackBar = SnackBar(content: Text('Expense added'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }).catchError((err) {

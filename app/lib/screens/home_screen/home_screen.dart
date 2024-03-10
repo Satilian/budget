@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../constants/constants.dart';
-import '../../api/api.dart';
 import '../../widgets/widgets.dart';
 import 'expense_form.dart';
 import 'expense_list.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-  final expenseApi = ExpenseApi();
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

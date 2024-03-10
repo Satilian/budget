@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:budget/repos/repos.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -25,6 +26,7 @@ final String apiUrl =
 abstract class BaseApi {
   static String? accessToken;
   static bool _initialized = false;
+  static AuthRepo? authRepo;
 
   static setAccessToken(value) {
     const storage = FlutterSecureStorage();
@@ -38,6 +40,7 @@ abstract class BaseApi {
 
     storage.delete(key: 'accessToken');
     BaseApi.accessToken = null;
+    BaseApi.authRepo?.logOut();
   }
 
   static HttpClient client = HttpClient()
@@ -140,7 +143,7 @@ abstract class BaseApi {
       try {
         res = await req.close();
       } catch (e) {
-        log(e.toString());
+        log('request error: ${e.toString()}');
         res = null;
       }
     } else {
@@ -158,7 +161,7 @@ abstract class BaseApi {
       if (res?.statusCode == 401) {
         BaseApi.removeAccessToken();
       }
-      debugPrint('raw error text: ${res?.statusCode}');
+      log('response error: ${res?.toString()}');
       throw errorFactory();
     }
   }

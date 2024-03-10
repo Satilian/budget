@@ -39,3 +39,13 @@ type ExpenseNameDto struct {
 	ID   uuid.UUID `json:"id,omitempty"`
 	Name string    `json:"name,omitempty"`
 }
+
+type ExpenseItemFilter struct {
+	CategoryId string `form:"categoryId,omitempty" binding:"uuid"`
+}
+
+type ExpenseItemDto struct {
+	ID    uuid.UUID `json:"id,omitempty"`
+	Name  string    `json:"name,omitempty"`
+	Value float32   `json:"value,omitempty"`
+}

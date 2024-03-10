@@ -10,20 +10,20 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      builder: (context, state) {
-        switch (state.status) {
-          case AuthStatus.unauthenticated:
-            return const AuthScreen();
-          case AuthStatus.authenticated:
-            return HomeScreen();
-          case AuthStatus.unknown:
+    final authStatus = context.select((AuthBloc bloc) => bloc.state.status);
+
+    switch (authStatus) {
+      case AuthStatus.unauthenticated:
+        return const AuthScreen();
+      case AuthStatus.authenticated:
+        context.read<ExpenseRepo>().getCategories();
+        return const HomeScreen();
+      /* case AuthStatus.unknown:
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
-            );
-        }
-      },
-      listener: (context, state) {},
-    );
+            ); */
+      default:
+        return const AuthScreen();
+    }
   }
 }

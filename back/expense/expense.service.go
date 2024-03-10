@@ -128,3 +128,39 @@ func getExpenseNames(
 
 	return names, err
 }
+
+func getExpenseItems(
+	accountId string,
+	filter models.ExpenseItemFilter,
+) ([]models.ExpenseItemDto, error) {
+	expense := []models.ExpenseItemDto{}
+
+	dataSource := dic.Instance.Get("DB").(*sql.DB)
+
+	rows, err := dataSource.Query(`
+		SELECT expense_names.id, expense_names.name, SUM(expense.value) as value 
+		FROM expense 
+		LEFT JOIN expense_names ON expense_names.id = expense.expense_nameId 
+		WHERE expense.accountid=$1
+		AND expense.categoryid=$2
+		GROUP BY expense_names.id
+	`, accountId, filter.CategoryId)
+
+	if err != nil {
+		return expense, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		e := models.ExpenseItemDto{}
+		err := rows.Scan(&e.ID, &e.Name, &e.Value)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		expense = append(expense, e)
+	}
+
+	return expense, err
+}

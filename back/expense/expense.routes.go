@@ -80,4 +80,28 @@ func AddRoutes(rg *gin.RouterGroup) {
 			c.Error(err)
 		}
 	})
+
+	rg.GET("/items", func(c *gin.Context) {
+		claims, ok := c.Get("user")
+
+		if !ok {
+			c.Status(http.StatusUnauthorized)
+			c.Abort()
+		}
+
+		var filter models.ExpenseItemFilter
+
+		if err := c.ShouldBind(&filter); err != nil {
+			c.Error(err)
+		}
+
+		if items, err := getExpenseItems(
+			claims.(*jwt.StandardClaims).Audience,
+			filter,
+		); err == nil {
+			c.JSON(http.StatusOK, gin.H{"items": items})
+		} else {
+			c.Error(err)
+		}
+	})
 }

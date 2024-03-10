@@ -4,21 +4,32 @@ import 'package:budget/api/api.dart';
 
 class ExpenseRepo {
   final expenseApi = ExpenseApi();
-  final _controller = StreamController<List<ExpenseCategory>>();
+  final _categories = StreamController<List<ExpenseCategory>>();
+  final _items = StreamController<List<ExpenseItem>>();
 
   Stream<List<ExpenseCategory>> get categories async* {
-    yield await expenseApi.fetchCategories();
-    yield* _controller.stream;
+    yield* _categories.stream;
+  }
+
+  Stream<List<ExpenseItem>> get items async* {
+    yield* _items.stream;
   }
 
   Future<void> addExpense(Map<String, dynamic> val) async {
     await expenseApi.addExpense(AddExpenseData.fromJson(val));
-    _controller.add(await expenseApi.fetchCategories());
+    await getCategories();
   }
 
   Future<void> getCategories() async {
-    _controller.add(await expenseApi.fetchCategories());
+    _categories.add(await expenseApi.fetchCategories());
   }
 
-  void dispose() => _controller.close();
+  Future<void> getItems(ExpenseItemsFilter filter) async {
+    _items.add(await expenseApi.fetchItems(filter));
+  }
+
+  void dispose() {
+    _categories.close();
+    _items.close();
+  }
 }

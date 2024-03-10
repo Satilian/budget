@@ -2,8 +2,6 @@ import '../common/base_api.dart';
 import 'models/models.dart';
 
 class AuthApi extends BaseApi {
-  AuthApi();
-
   @override
   Map<String, String> get defaultHeaders => {
         'Content-Type': 'application/json; charset=UTF-8',

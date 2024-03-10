@@ -12,6 +12,7 @@ class AppProvider extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthRepo>(
+          lazy: false,
           create: (context) => AuthRepo(),
         ),
         RepositoryProvider<ExpenseRepo>(

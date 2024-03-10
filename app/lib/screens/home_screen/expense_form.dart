@@ -25,13 +25,15 @@ class _ExpenseFormState extends State<ExpenseForm> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   void _onSubmit(Map<String, dynamic> val) {
-    RepositoryProvider.of<ExpenseRepo>(context).addExpense(val).then((value) {
+    context.read<ExpenseRepo>().addExpense(val).then((value) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.expense_added)),
       );
       Navigator.pop(context, true);
     }).catchError((err) {
-      debugPrint(err.message(AppLocalizations.of(context)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ошибка добавления расхода')),
+      );
     });
   }
 

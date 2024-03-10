@@ -2,8 +2,6 @@ import '../common/base_api.dart';
 import 'models/models.dart';
 
 class CategoriesApi extends BaseApi {
-  CategoriesApi();
-
   Future<List<CategoriesResponse>> find(CategoriesFilter filter) {
     return fetch<CategoriesFilter, List<CategoriesResponse>>(
       HttpMethod.get,

@@ -33,4 +33,14 @@ class ExpenseApi extends BaseApi {
           .toList(),
     );
   }
+
+  Future<List<ExpenseItem>> fetchItems(ExpenseItemsFilter filter) {
+    return fetch<ExpenseItemsFilter, List<ExpenseItem>>(
+      HttpMethod.get,
+      'expense/items?categoryId=${filter.categoryId}',
+      (json) => json['items']
+          .map<ExpenseItem>((item) => ExpenseItem.fromJson(item))
+          .toList(),
+    );
+  }
 }

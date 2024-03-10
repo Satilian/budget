@@ -6,6 +6,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 enum AuthStatus { unknown, authenticated, unauthenticated }
 
 class AuthRepo {
+  AuthRepo() {
+    BaseApi.authRepo = this;
+  }
+
   final _controller = StreamController<AuthStatus>();
   final authApi = AuthApi();
   final storage = const FlutterSecureStorage();
@@ -23,7 +27,6 @@ class AuthRepo {
   }
 
   void logOut() {
-    BaseApi.removeAccessToken();
     _controller.add(AuthStatus.unauthenticated);
   }
 

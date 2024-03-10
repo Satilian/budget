@@ -1,8 +1,8 @@
-import '../common/base_repository.dart';
+import '../common/base_api.dart';
 import 'models/models.dart';
 
-class AuthRepository extends BaseRepository {
-  AuthRepository();
+class AuthApi extends BaseApi {
+  AuthApi();
 
   @override
   Map<String, String> get defaultHeaders => {

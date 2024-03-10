@@ -1,8 +1,8 @@
-import '../common/base_repository.dart';
+import '../common/base_api.dart';
 import 'models/models.dart';
 
-class ExpenseRepository extends BaseRepository {
-  ExpenseRepository();
+class ExpenseApi extends BaseApi {
+  ExpenseApi();
 
   Future<void> addExpense(AddExpenseData body) {
     return fetch<AddExpenseData, void>(
@@ -19,6 +19,17 @@ class ExpenseRepository extends BaseRepository {
       'expense/categories',
       (json) => json['expense']
           .map<ExpenseCategory>((item) => ExpenseCategory.fromJson(item))
+          .toList(),
+    );
+  }
+
+  Future<List<ExpenseNamesResponse>> names(ExpenseNamesFilter filter) {
+    return fetch<ExpenseNamesFilter, List<ExpenseNamesResponse>>(
+      HttpMethod.get,
+      'expense/names?name=${filter.name}',
+      (json) => json['names']
+          .map<ExpenseNamesResponse>(
+              (item) => ExpenseNamesResponse.fromJson(item))
           .toList(),
     );
   }

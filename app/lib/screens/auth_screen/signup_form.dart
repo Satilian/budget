@@ -6,9 +6,9 @@ import '../../api/api.dart';
 import 'form_buttons.dart';
 
 class SignupForm extends StatefulWidget {
-  const SignupForm({super.key, required this.authRepository, this.goToLogin});
-  final AuthRepository authRepository;
-  final VoidCallback? goToLogin;
+  SignupForm({super.key, required this.goToLogin});
+  final AuthApi authApi = AuthApi();
+  final VoidCallback goToLogin;
 
   @override
   State<SignupForm> createState() {
@@ -23,13 +23,13 @@ class _SignupFormState extends State<SignupForm> {
   bool _passHasError = false;
   bool _passIsVisible = false;
 
-  void _onSubmit(Map<String, dynamic> val) async {
-    try {
-      await widget.authRepository.signup(SignupData.fromJson(val));
-      widget.goToLogin!();
-    } catch (err) {
-      debugPrint('Signup request failed: $err');
-    }
+  void _onSubmit(Map<String, dynamic> val) {
+    widget.authApi.signup(SignupData.fromJson(val)).then((res) {
+      widget.goToLogin();
+    }).catchError((err) {
+      var snackBar = SnackBar(content: Text('Signup request failed: $err'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
   }
 
   @override

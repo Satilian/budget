@@ -91,3 +91,40 @@ func getExpenseCategories(userId string, accountId string) ([]models.ExpenseCate
 
 	return expense, err
 }
+
+func getExpenseNames(
+	accountId string,
+	filter models.ExpenseNameFilter,
+) ([]models.ExpenseNameDto, error) {
+	names := []models.ExpenseNameDto{}
+
+	dataSource := dic.Instance.Get("DB").(*sql.DB)
+
+	rows, err := dataSource.Query(`
+		SELECT id, name 
+		FROM expense_names
+		WHERE accountId=$1
+		AND LOWER(name) LIKE LOWER($2 || '%')
+		ORDER BY name ASC`,
+		accountId,
+		filter.Name,
+	)
+
+	if err != nil {
+		return names, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		n := models.ExpenseNameDto{}
+		err := rows.Scan(&n.ID, &n.Name)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		names = append(names, n)
+	}
+
+	return names, err
+}

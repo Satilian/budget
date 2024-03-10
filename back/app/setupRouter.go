@@ -2,6 +2,7 @@ package app
 
 import (
 	"back/auth"
+	"back/categories"
 	"back/expense"
 	"back/test"
 
@@ -18,6 +19,7 @@ func SetupRouter() *gin.Engine {
 	test.AddRoutes(r.Group("/test"))
 	auth.AddRoutes(r.Group("/auth"))
 	expense.AddRoutes(r.Group("/expense"))
+	categories.AddRoutes(r.Group("/categories"))
 
 	return r
 }

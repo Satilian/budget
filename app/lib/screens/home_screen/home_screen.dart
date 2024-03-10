@@ -9,30 +9,22 @@ import 'expense_list.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
-  final expenseRepository = ExpenseRepository();
+  final expenseApi = ExpenseApi();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
-            child: ExpenseList(expenseRepository: expenseRepository),
-          ),
+          const Expanded(child: ExpenseList()),
           AddBtn(
             label: AppLocalizations.of(context)!.expense,
             iconSrc: icons.aim,
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (BuildContext context) {
-                  return Modal(
-                    child: ExpenseForm(expenseRepository: expenseRepository),
-                  );
-                },
-              );
-            },
+            onTap: () => showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => Modal(child: ExpenseForm()),
+            ),
           ),
           const SizedBox(height: 10),
         ],

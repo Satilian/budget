@@ -12,9 +12,3 @@ type BaseEntity struct {
 	UpdatedAt time.Time `json:"updated,omitempty"`
 	DeletedAt time.Time `json:"deleted,omitempty"`
 }
-
-type CategoryEntity struct {
-	*BaseEntity
-	Name      string    `json:"name,omitempty"`
-	AccountId uuid.UUID `json:"accountId,omitempty"`
-}

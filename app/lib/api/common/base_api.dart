@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
@@ -21,7 +22,7 @@ final _voidType = _getType<void>();
 final String apiUrl =
     'https://${dotenv.env['API_HOST']}:${dotenv.env['API_PORT']}/';
 
-abstract class BaseRepository {
+abstract class BaseApi {
   static String? accessToken;
   static bool _initialized = false;
 
@@ -29,7 +30,14 @@ abstract class BaseRepository {
     const storage = FlutterSecureStorage();
 
     storage.write(key: 'accessToken', value: value);
-    BaseRepository.accessToken = value;
+    BaseApi.accessToken = value;
+  }
+
+  static removeAccessToken() {
+    const storage = FlutterSecureStorage();
+
+    storage.delete(key: 'accessToken');
+    BaseApi.accessToken = null;
   }
 
   static HttpClient client = HttpClient()
@@ -41,13 +49,13 @@ abstract class BaseRepository {
     'Content-Type': 'application/json',
   };
 
-  BaseRepository() {
+  BaseApi() {
     if (!_initialized) {
       const storage = FlutterSecureStorage();
 
       storage
           .read(key: "accessToken")
-          .then((value) => BaseRepository.setAccessToken(value));
+          .then((value) => BaseApi.setAccessToken(value));
       _initialized = true;
     }
   }
@@ -129,7 +137,12 @@ abstract class BaseRepository {
     if (req != null) {
       setHeaders(req, headers);
       if (body != null) req.add(utf8.encode(body));
-      res = await req.close();
+      try {
+        res = await req.close();
+      } catch (e) {
+        log(e.toString());
+        res = null;
+      }
     } else {
       res = null;
     }
@@ -142,6 +155,9 @@ abstract class BaseRepository {
             jsonDecode(await res.transform(utf8.decoder).join()));
       }
     } else {
+      if (res?.statusCode == 401) {
+        BaseApi.removeAccessToken();
+      }
       debugPrint('raw error text: ${res?.statusCode}');
       throw errorFactory();
     }

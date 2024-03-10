@@ -39,4 +39,45 @@ func AddRoutes(rg *gin.RouterGroup) {
 			c.Error(err)
 		}
 	})
+
+	rg.GET("/categories", func(c *gin.Context) {
+		claims, ok := c.Get("user")
+
+		if !ok {
+			c.Status(http.StatusUnauthorized)
+			c.Abort()
+		}
+		if expense, err := getExpenseCategories(
+			claims.(*jwt.StandardClaims).Id,
+			claims.(*jwt.StandardClaims).Audience,
+		); err == nil {
+			c.JSON(http.StatusOK, gin.H{"expense": expense})
+		} else {
+			c.Error(err)
+		}
+	})
+
+	rg.GET("/names", func(c *gin.Context) {
+		claims, ok := c.Get("user")
+
+		if !ok {
+			c.Status(http.StatusUnauthorized)
+			c.Abort()
+		}
+
+		var filter models.ExpenseNameFilter
+
+		if err := c.ShouldBind(&filter); err != nil {
+			c.Error(err)
+		}
+
+		if names, err := getExpenseNames(
+			claims.(*jwt.StandardClaims).Audience,
+			filter,
+		); err == nil {
+			c.JSON(http.StatusOK, gin.H{"names": names})
+		} else {
+			c.Error(err)
+		}
+	})
 }

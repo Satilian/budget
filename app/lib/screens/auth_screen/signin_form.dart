@@ -1,18 +1,13 @@
+import 'package:budget/repos/repos.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../api/api.dart';
 import 'form_buttons.dart';
 
 class SigninForm extends StatefulWidget {
-  const SigninForm({
-    super.key,
-    required this.authRepository,
-    required this.setUserLoggedIn,
-  });
-  final VoidCallback setUserLoggedIn;
-  final AuthRepository authRepository;
+  const SigninForm({super.key});
 
   @override
   State<SigninForm> createState() {
@@ -30,10 +25,7 @@ class _SigninFormState extends State<SigninForm> {
   bool _passIsVisible = false;
 
   void _onSubmit(Map<String, dynamic> val) {
-    widget.authRepository.signin(SigninData.fromJson(val)).then((value) {
-      BaseRepository.setAccessToken(value.jwt);
-      widget.setUserLoggedIn();
-    }).catchError((err) {
+    RepositoryProvider.of<AuthRepo>(context).logIn(val).catchError((err) {
       var snackBar = SnackBar(content: Text('Signin request failed: $err'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });

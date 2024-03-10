@@ -1,59 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../constants/constants.dart';
+import '../../api/api.dart';
 import '../../widgets/widgets.dart';
 import 'expense_form.dart';
 import 'expense_list.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+  final expenseApi = ExpenseApi();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
-        alignment: Alignment.bottomCenter,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(height: 50),
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints:
-                          BoxConstraints(maxHeight: constraints.maxHeight),
-                      child: const ExpenseList(),
-                    ),
-                  );
-                },
-              ),
+      body: Column(
+        children: [
+          const Expanded(child: ExpenseList()),
+          AddBtn(
+            label: AppLocalizations.of(context)!.expense,
+            iconSrc: icons.aim,
+            onTap: () => showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => Modal(child: ExpenseForm()),
             ),
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                AddBtn(
-                  label: 'Расходы',
-                  iconSrc: 'assets/aim.svg',
-                  onTap: () {
-                    showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return const Modal(
-                          child: ExpenseForm(),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 10),
+        ],
       ),
     );
   }

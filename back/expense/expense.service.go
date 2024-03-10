@@ -4,6 +4,7 @@ import (
 	"back/dic"
 	"back/models"
 	"database/sql"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -57,4 +58,73 @@ func addExpense(expenseData *models.AddExpenseDto, userId string, accountId stri
 	}
 
 	return expense, err
+}
+
+func getExpenseCategories(userId string, accountId string) ([]models.ExpenseCategoryDto, error) {
+	expense := []models.ExpenseCategoryDto{}
+
+	dataSource := dic.Instance.Get("DB").(*sql.DB)
+
+	rows, err := dataSource.Query(`
+		SELECT categories.id, categories.name, SUM(expense.value) as value 
+		FROM expense 
+		LEFT JOIN categories ON categories.id = expense.categoryid 
+		WHERE expense.accountid=$1
+		GROUP BY categories.id, categories.name
+	`, accountId)
+
+	if err != nil {
+		return expense, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		e := models.ExpenseCategoryDto{}
+		err := rows.Scan(&e.ID, &e.Name, &e.Value)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		expense = append(expense, e)
+	}
+
+	return expense, err
+}
+
+func getExpenseNames(
+	accountId string,
+	filter models.ExpenseNameFilter,
+) ([]models.ExpenseNameDto, error) {
+	names := []models.ExpenseNameDto{}
+
+	dataSource := dic.Instance.Get("DB").(*sql.DB)
+
+	rows, err := dataSource.Query(`
+		SELECT id, name 
+		FROM expense_names
+		WHERE accountId=$1
+		AND LOWER(name) LIKE LOWER($2 || '%')
+		ORDER BY name ASC`,
+		accountId,
+		filter.Name,
+	)
+
+	if err != nil {
+		return names, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		n := models.ExpenseNameDto{}
+		err := rows.Scan(&n.ID, &n.Name)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		names = append(names, n)
+	}
+
+	return names, err
 }

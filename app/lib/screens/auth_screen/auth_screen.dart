@@ -2,13 +2,10 @@ import 'package:budget/screens/auth_screen/signup_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../api/api.dart';
 import 'signin_form.dart';
 
 class AuthScreen extends StatefulWidget {
-  AuthScreen({super.key, required this.setUserLoggedIn});
-  final VoidCallback setUserLoggedIn;
-  final authRepository = AuthRepository();
+  const AuthScreen({super.key});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -35,12 +32,8 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
             ),
             _isLoginForm
-                ? SigninForm(
-                    authRepository: widget.authRepository,
-                    setUserLoggedIn: widget.setUserLoggedIn,
-                  )
+                ? const SigninForm()
                 : SignupForm(
-                    authRepository: widget.authRepository,
                     goToLogin: () {
                       setState(() {
                         _isLoginForm = true;

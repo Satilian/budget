@@ -1,37 +1,29 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:budget/modules/modules.dart';
+import 'package:budget/repos/repos.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'screens.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  bool userLoggedIn = false;
-
-  @override
-  void initState() {
-    const storage = FlutterSecureStorage();
-    storage.read(key: "accessToken").then((value) {
-      userLoggedIn = value?.isNotEmpty ?? false;
-    });
-    super.initState();
-  }
-
-  void setUserLoggedIn() {
-    setState(() {
-      userLoggedIn = true;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return userLoggedIn
-        ? const HomeScreen()
-        : AuthScreen(setUserLoggedIn: setUserLoggedIn);
+    return BlocConsumer<AuthBloc, AuthState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case AuthStatus.unauthenticated:
+            return const AuthScreen();
+          case AuthStatus.authenticated:
+            return HomeScreen();
+          case AuthStatus.unknown:
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+        }
+      },
+      listener: (context, state) {},
+    );
   }
 }

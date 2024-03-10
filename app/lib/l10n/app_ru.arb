@@ -6,5 +6,8 @@
     "auth_create_account": "Создать аккаунт",
     "auth_forgot_password": "Забыли пароль",
 
+    "expense": "Расходы",
+    "expense_added": "Расход добавлен",
+
     "errors_unknown": "Неизвестная ошибка"
 }

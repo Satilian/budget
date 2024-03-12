@@ -21,3 +21,5 @@ final class ItemsLoadDone extends ExpenseEvent {
 
   final List<ExpenseItem> items;
 }
+
+final class ItemsReset extends ExpenseEvent {}

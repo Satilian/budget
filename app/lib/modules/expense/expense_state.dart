@@ -12,5 +12,9 @@ class ExpenseState extends Equatable {
   final List<ExpenseItem> items;
 
   @override
-  List<Object> get props => [categories, items];
+  List<Object> get props => [
+        categories,
+        items,
+        {categoryId: categoryId}
+      ];
 }

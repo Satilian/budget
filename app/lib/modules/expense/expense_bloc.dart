@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:budget/api/api.dart';
 import 'package:budget/repos/repos.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'expense_event.dart';
@@ -14,6 +13,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     on<CategoriesLoaded>(_onCategoriesLoaded);
     on<ItemsLoadDone>(_onItemsLoadDone);
     on<ItemsLoadStart>(_onItemsLoadStart);
+    on<ItemsReset>(_onItemsReset);
 
     categoriesSubscription = expenseRepo.categories.listen(
       (items) => add(CategoriesLoaded(items)),
@@ -29,23 +29,30 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
   late StreamSubscription<List<ExpenseItem>> itemsSubscription;
 
   _onCategoriesLoaded(event, emit) {
-    return emit(ExpenseState(categories: event.categories));
+    emit(ExpenseState(categories: event.categories));
   }
 
   _onItemsLoadStart(event, emit) {
     emit(ExpenseState(
       categories: state.categories,
       categoryId: event.categoryId,
-      items: const <ExpenseItem>[],
     ));
     expenseRepo.getItems(ExpenseItemsFilter(categoryId: event.categoryId));
   }
 
   _onItemsLoadDone(event, emit) {
-    return emit(ExpenseState(
+    emit(ExpenseState(
       categories: state.categories,
       categoryId: state.categoryId,
       items: event.items,
+    ));
+  }
+
+  _onItemsReset(event, emit) {
+    emit(ExpenseState(
+      categories: state.categories,
+      categoryId: null,
+      items: const <ExpenseItem>[],
     ));
   }
 }

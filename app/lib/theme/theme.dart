@@ -15,8 +15,10 @@ final theme = ThemeData(
   ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFF212832),
+    foregroundColor: Color(0xFF1A2028),
     titleTextStyle: TextStyle(
       color: Colors.green,
+      backgroundColor: Color(0xFF1A2028),
     ),
   ),
 );

@@ -2,13 +2,18 @@ package app
 
 import (
 	"log"
+	"os"
 
 	"github.com/subosito/gotenv"
 )
 
 func LoadEnv() {
-	err := gotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	file := ".env.dev"
+	if os.Args[1] == "prod" {
+		file = ".env"
+	}
+
+	if err := gotenv.Load(file); err != nil {
+		log.Fatalf("Error loading %v file", file)
 	}
 }

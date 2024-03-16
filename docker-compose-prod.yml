@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DBNAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  golang:
+    build: 
+      dockerfile: back.Dockerfile
+    restart: always
+    command: app prod
+    ports:
+      - 8080:8080
+
+volumes:
+  db:

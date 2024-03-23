@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,7 +8,7 @@ import 'screens/screens.dart';
 import 'theme/theme.dart';
 
 void main() async {
-  await dotenv.load();
+  await dotenv.load(fileName: kDebugMode ? '.env.dev' : '.env');
   runApp(const MyApp());
 }
 

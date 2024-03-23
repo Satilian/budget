@@ -11,6 +11,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.authRepo}) : super(const AuthState.unknown()) {
     on<AuthStatusChanged>(_onAuthStatusChanged);
     on<AuthLogoutRequested>(_onAuthLogoutRequested);
+    on<AuthRemoveRequested>(_onAuthRemoveRequested);
 
     authStatusSubscription = authRepo.status.listen(
       (status) => add(AuthStatusChanged(status)),
@@ -39,5 +40,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onAuthLogoutRequested(event, emit) {
     authRepo.logOut();
+  }
+
+  void _onAuthRemoveRequested(event, emit) {
+    authRepo.removeUser();
   }
 }

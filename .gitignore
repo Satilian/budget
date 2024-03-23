@@ -1,3 +1,4 @@
 pgdata
 tmp
 .env
+.env.dev

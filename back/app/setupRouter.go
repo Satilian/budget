@@ -4,7 +4,6 @@ import (
 	"back/auth"
 	"back/categories"
 	"back/expense"
-	"back/test"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +15,6 @@ func SetupRouter() *gin.Engine {
 
 	r.Use(gin.Recovery())
 
-	test.AddRoutes(r.Group("/test"))
 	auth.AddRoutes(r.Group("/auth"))
 	expense.AddRoutes(r.Group("/expense"))
 	categories.AddRoutes(r.Group("/categories"))

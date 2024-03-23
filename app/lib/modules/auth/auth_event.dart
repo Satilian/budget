@@ -11,3 +11,5 @@ final class AuthStatusChanged extends AuthEvent {
 }
 
 final class AuthLogoutRequested extends AuthEvent {}
+
+final class AuthRemoveRequested extends AuthEvent {}

@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"crypto/tls"
 	"log"
 	"net/http"
 	"os"
@@ -13,12 +14,13 @@ import (
 )
 
 func Serv(r *gin.Engine) {
-	if os.Args[1] == "prod" {
-		s := &http.Server{
-			Addr:      ":" + os.Getenv("PORT"),
-			Handler:   r,
+	var s *http.Server
+	if len(os.Args) > 1 && os.Args[1] == "prod" {
+		s = &http.Server{
+			Addr:    ":" + os.Getenv("PORT"),
+			Handler: r,
 		}
-	
+
 		go func() {
 			if err := s.ListenAndServe(); err != nil {
 				log.Fatalf("listen: %s\n", err)
@@ -27,12 +29,12 @@ func Serv(r *gin.Engine) {
 	} else {
 		cert, _ := tls.LoadX509KeyPair("ssl/budget_local.crt", "ssl/budget_local.key")
 
-		s := &http.Server{
+		s = &http.Server{
 			Addr:      ":" + os.Getenv("PORT"),
 			Handler:   r,
 			TLSConfig: &tls.Config{Certificates: []tls.Certificate{cert}},
 		}
-	
+
 		go func() {
 			if err := s.ListenAndServeTLS("", ""); err != nil {
 				log.Fatalf("listen: %s\n", err)

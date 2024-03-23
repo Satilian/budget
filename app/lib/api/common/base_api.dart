@@ -40,7 +40,6 @@ abstract class BaseApi {
 
     storage.delete(key: 'accessToken');
     BaseApi.accessToken = null;
-    BaseApi.authRepo?.logOut();
   }
 
   static HttpClient client = HttpClient()
@@ -159,7 +158,7 @@ abstract class BaseApi {
       }
     } else {
       if (res?.statusCode == 401) {
-        BaseApi.removeAccessToken();
+        BaseApi.authRepo?.logOut();
       }
       log('response error: ${res?.statusCode} ${res?.toString()}');
       throw errorFactory();

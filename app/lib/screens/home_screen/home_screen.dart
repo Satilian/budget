@@ -1,3 +1,4 @@
+import 'package:budget/modules/modules.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -12,6 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const UserMenu()),
       body: Column(
         children: [
           const Expanded(child: ExpenseList()),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:budget/api/api.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum AuthStatus { unknown, authenticated, unauthenticated }
@@ -27,7 +28,16 @@ class AuthRepo {
   }
 
   void logOut() {
+    BaseApi.removeAccessToken();
     _controller.add(AuthStatus.unauthenticated);
+  }
+
+  void removeUser() {
+    authApi.remove().then((value) {
+      logOut();
+    }).catchError((e) {
+      debugPrint(e);
+    });
   }
 
   void dispose() => _controller.close();

@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"crypto/tls"
 	"log"
 	"net/http"
 	"os"
@@ -14,19 +13,32 @@ import (
 )
 
 func Serv(r *gin.Engine) {
-	cert, _ := tls.LoadX509KeyPair("ssl/budget_local.crt", "ssl/budget_local.key")
-
-	s := &http.Server{
-		Addr:      ":" + os.Getenv("PORT"),
-		Handler:   r,
-		TLSConfig: &tls.Config{Certificates: []tls.Certificate{cert}},
-	}
-
-	go func() {
-		if err := s.ListenAndServeTLS("", ""); err != nil {
-			log.Fatalf("listen: %s\n", err)
+	if os.Args[1] == "prod" {
+		s := &http.Server{
+			Addr:      ":" + os.Getenv("PORT"),
+			Handler:   r,
 		}
-	}()
+	
+		go func() {
+			if err := s.ListenAndServe(); err != nil {
+				log.Fatalf("listen: %s\n", err)
+			}
+		}()
+	} else {
+		cert, _ := tls.LoadX509KeyPair("ssl/budget_local.crt", "ssl/budget_local.key")
+
+		s := &http.Server{
+			Addr:      ":" + os.Getenv("PORT"),
+			Handler:   r,
+			TLSConfig: &tls.Config{Certificates: []tls.Certificate{cert}},
+		}
+	
+		go func() {
+			if err := s.ListenAndServeTLS("", ""); err != nil {
+				log.Fatalf("listen: %s\n", err)
+			}
+		}()
+	}
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)

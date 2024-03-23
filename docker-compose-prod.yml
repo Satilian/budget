@@ -12,12 +12,23 @@ services:
       - 5432:5432
 
   golang:
-    build: 
+    build:
+      context: .
       dockerfile: back.Dockerfile
     restart: always
     command: app prod
+    volumes:
+      - back:/usr/src/app
     ports:
       - 8080:8080
+    networks:
+      - default
+      - proxy
 
 volumes:
   db:
+  back:
+
+networks:
+  proxy:
+    external: true

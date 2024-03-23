@@ -161,7 +161,7 @@ abstract class BaseApi {
       if (res?.statusCode == 401) {
         BaseApi.removeAccessToken();
       }
-      log('response error: ${res?.toString()}');
+      log('response error: ${res?.statusCode} ${res?.toString()}');
       throw errorFactory();
     }
   }

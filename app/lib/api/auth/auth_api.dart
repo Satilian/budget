@@ -28,7 +28,7 @@ class AuthApi extends BaseApi {
   Future<void> remove() {
     return fetch<void, void>(
       HttpMethod.get,
-      'auth/remove',
+      'user/remove',
       (json) => json,
     );
   }

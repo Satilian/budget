@@ -51,7 +51,7 @@ func signin(signinData *models.SigninDto) (models.JwtDto, error) {
 
 	dataSource := dic.Instance.Get("DB").(*sql.DB)
 	dataSource.QueryRow(
-		"SELECT id, password, accountId FROM users WHERE login=$1",
+		"SELECT id, password, accountId FROM users WHERE login=$1 AND deleted_at IS NULL",
 		signinData.Login).Scan(&userId, &hashedPassword, &accountId)
 
 	if err := VerifyPassword(hashedPassword, signinData.Password); err != nil {

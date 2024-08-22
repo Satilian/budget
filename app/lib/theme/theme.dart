@@ -5,7 +5,7 @@ final theme = ThemeData(
     seedColor: Colors.green,
     brightness: Brightness.dark,
     shadow: const Color(0x7F000000),
-    background: const Color(0xFF212832),
+    surface: const Color(0xFF212832),
   ),
   primaryColor: Colors.white,
   primarySwatch: Colors.green,

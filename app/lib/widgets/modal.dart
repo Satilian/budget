@@ -12,7 +12,7 @@ class Modal extends StatelessWidget {
       child: Container(
         height: 300,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).colorScheme.shadow,

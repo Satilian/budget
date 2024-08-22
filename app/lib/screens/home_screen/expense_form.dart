@@ -37,25 +37,25 @@ class _ExpenseFormState extends State<ExpenseForm> {
     });
   }
 
-  FutureOr<Iterable<String>> getCatogories(String name) async {
+  FutureOr<List<String>> getCatogories(String name) async {
     if (name.isNotEmpty) {
       var res = await widget.categoriesApi.find(CategoriesFilter(name: name));
       if (res.isEmpty) {
         return [name];
       }
-      return res.map((e) => e.name);
+      return res.map((e) => e.name).toList();
     } else {
       return [];
     }
   }
 
-  FutureOr<Iterable<String>> getExpenseNames(String name) async {
+  FutureOr<List<String>> getExpenseNames(String name) async {
     if (name.isNotEmpty) {
       var res = await widget.expenseApi.names(ExpenseNamesFilter(name: name));
       if (res.isEmpty) {
         return [name];
       }
-      return res.map((e) => e.name);
+      return res.map((e) => e.name).toList();
     } else {
       return [];
     }
@@ -150,11 +150,11 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 }
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(
                     Theme.of(context).colorScheme.primary),
-                overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed)) {
+                overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                  (Set<WidgetState> states) {
+                    if (states.contains(WidgetState.pressed)) {
                       return const Color(0xFF76A777);
                     }
                     return null;

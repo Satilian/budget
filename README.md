@@ -1,5 +1,7 @@
 ### Famili Budget - мэнеджер расходов
 
+## Email: our.budget.online@gmail.com
+
 # Migrations
 goose -dir db/migrations postgres "user= password= dbname=budget sslmode=disable" up
 

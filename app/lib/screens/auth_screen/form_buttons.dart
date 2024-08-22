@@ -15,11 +15,11 @@ class FormButtons extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onSubmit,
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(
                   Theme.of(context).colorScheme.primary),
-              overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.pressed)) {
+              overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.pressed)) {
                     return const Color(0xFF76A777);
                   }
                   return null;

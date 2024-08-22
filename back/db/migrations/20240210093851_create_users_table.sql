@@ -1,5 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE public.accounts (
 	id uuid DEFAULT uuid_generate_v4() NOT NULL,
 	email varchar NOT NULL,

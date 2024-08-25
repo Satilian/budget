@@ -1,0 +1,25 @@
+.button {
+  background: white;
+  border: 1px solid #bbbbbb;
+  border-radius: 4px;
+  font: inherit;
+  line-height: 30px;
+  padding: 0 10px;
+  cursor: pointer;
+  outline: 0;
+  width: 100%;
+  font-size: inherit;
+  color: inherit;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.size-small {
+    line-height: 24px;
+  }
+
+  &.size-big {
+    line-height: 38px;
+  }
+}

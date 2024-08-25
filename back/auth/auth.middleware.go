@@ -23,3 +23,15 @@ func AuthRequired() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func AuthNotRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		claims, err := ValidateToken(c.GetHeader("Authorization"))
+
+		if err == nil {
+			c.Set("user", claims)
+		}
+
+		c.Next()
+	}
+}

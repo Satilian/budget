@@ -12,14 +12,16 @@ import (
 var r = gin.Default()
 
 func SetupRouter() *gin.Engine {
-	r.Static("/assets", "./assets")
+	r.Static("/static", "./assets")
 
 	r.Use(gin.Recovery())
 
-	auth.AddRoutes(r.Group("/auth"))
-	user.AddRoutes(r.Group("/user"))
-	expense.AddRoutes(r.Group("/expense"))
-	categories.AddRoutes(r.Group("/categories"))
+	apiGroup := r.Group("/api")
+
+	auth.AddRoutes(apiGroup.Group("/auth"))
+	user.AddRoutes(apiGroup.Group("/user"))
+	expense.AddRoutes(apiGroup.Group("/expense"))
+	categories.AddRoutes(apiGroup.Group("/categories"))
 
 	return r
 }

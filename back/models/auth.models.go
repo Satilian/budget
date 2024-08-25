@@ -34,3 +34,11 @@ type UserEntity struct {
 	AccountId uuid.UUID `json:"accountId,omitempty"`
 	Password  string    `json:"password,omitempty"`
 }
+
+type DeleteUser struct {
+	Login string `form:"username"`
+}
+
+type RemoveByLinkDto struct {
+	Token string `form:"token"`
+}

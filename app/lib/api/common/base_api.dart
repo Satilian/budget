@@ -21,7 +21,7 @@ Type _getType<T>() => T;
 final _voidType = _getType<void>();
 
 final String apiUrl =
-    'https://${dotenv.env['API_HOST']}:${dotenv.env['API_PORT']}/';
+    'https://${dotenv.env['API_HOST']}:${dotenv.env['API_PORT']}/api/';
 
 abstract class BaseApi {
   static String? accessToken;

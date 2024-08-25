@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+.head {
+  width: 100vw;
+  line-height: 68px;
+  position: sticky;
+  top: 0;
+  display: Flex;
+  padding-inline: 30px;
+  background: linear-gradient(180deg, #7cb37e, white);
+
+  & h1 {
+    margin: 0;
+    color: #0065a6;
+  }
+}
+
+.footer {
+  width: 100vw;
+  height: 68px;
+  line-height: 68px;
+  padding-inline: 30px;
+  background: linear-gradient(0deg, #7cb37e, white);
+  display: flex;
+  column-gap: 24px;
+  position: sticky;
+  bottom: 0;
+
+  & > a:global(.active) {
+    display: none;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+
+  & > img {
+    width: 50px;
+    height: 50px;
+  }
+}

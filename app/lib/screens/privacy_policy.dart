@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicy extends StatefulWidget {
@@ -16,7 +17,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
     super.initState();
     controller = WebViewController()
       ..loadRequest(
-        Uri.parse('https://family-budget.online/assets/privacy-policy.html'),
+        Uri.parse('${dotenv.env['WEB_HOST']}/privacy-policy'),
       );
   }
 

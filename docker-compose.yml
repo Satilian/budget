@@ -6,10 +6,29 @@ services:
       POSTGRES_DB: ${DB_DBNAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - 5432:5432
     volumes:
       - db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  golang:
+    build:
+      context: .
+      dockerfile: back.Dockerfile
+    restart: always
+    command: app prod
+    volumes:
+      - back:/usr/src/app
+    ports:
+      - 8080:8080
+    networks:
+      - default
+      - proxy
 
 volumes:
   db:
+  back:
+
+networks:
+  proxy:
+    external: true

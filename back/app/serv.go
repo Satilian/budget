@@ -27,7 +27,10 @@ func Serv(r *gin.Engine) {
 			}
 		}()
 	} else {
-		cert, _ := tls.LoadX509KeyPair("ssl/budget_local.crt", "ssl/budget_local.key")
+		cert, err := tls.LoadX509KeyPair("ssl/budget.local.pem", "ssl/budget.local-key.pem")
+		if err != nil {
+			log.Fatalf("Failed to load TLS certificates: %v\n", err)
+		}
 
 		s = &http.Server{
 			Addr:      ":" + os.Getenv("PORT"),
@@ -36,6 +39,7 @@ func Serv(r *gin.Engine) {
 		}
 
 		go func() {
+			log.Printf("Server is running at https://%s:%s/\n", os.Getenv("HOST"), os.Getenv("PORT"))
 			if err := s.ListenAndServeTLS("", ""); err != nil {
 				log.Fatalf("listen: %s\n", err)
 			}

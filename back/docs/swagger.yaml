@@ -1,0 +1,431 @@
+basePath: /api
+definitions:
+  models.AddExpenseDto:
+    properties:
+      category:
+        type: string
+      expense:
+        type: string
+      value:
+        type: number
+    type: object
+  models.CategoriesResponse:
+    description: Categories response with list of categories
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/models.CategoryDto'
+        type: array
+    type: object
+  models.CategoryDto:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  models.ExpenseCategoriesResponse:
+    description: Expense categories response with list of categories and values
+    properties:
+      expense:
+        items:
+          $ref: '#/definitions/models.ExpenseCategoryDto'
+        type: array
+    type: object
+  models.ExpenseCategoryDto:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      value:
+        type: number
+    type: object
+  models.ExpenseEntity:
+    properties:
+      accountId:
+        type: string
+      categoryId:
+        type: string
+      created:
+        type: string
+      deleted:
+        type: string
+      expenseName:
+        type: string
+      id:
+        type: string
+      updated:
+        type: string
+      userId:
+        type: string
+      value:
+        type: number
+    type: object
+  models.ExpenseItemDto:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      value:
+        type: number
+    type: object
+  models.ExpenseItemsResponse:
+    description: Expense items response with list of items
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/models.ExpenseItemDto'
+        type: array
+    type: object
+  models.ExpenseNameDto:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  models.ExpenseNamesResponse:
+    description: Expense names response with list of names
+    properties:
+      names:
+        items:
+          $ref: '#/definitions/models.ExpenseNameDto'
+        type: array
+    type: object
+  models.JwtDto:
+    properties:
+      jwt:
+        type: string
+    type: object
+  models.SigninDto:
+    properties:
+      login:
+        type: string
+      pass:
+        type: string
+    type: object
+  models.SignupDto:
+    properties:
+      email:
+        type: string
+      login:
+        type: string
+      pass:
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      login:
+        type: string
+      pass:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Budget management API with authentication, expenses, and categories
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Budget API
+  version: "1.0"
+paths:
+  /auth:
+    get:
+      description: Check if auth service is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+      summary: Health check for auth service
+      tags:
+      - auth
+  /auth/signin:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and get JWT token
+      parameters:
+      - description: Signin data
+        in: body
+        name: signin
+        required: true
+        schema:
+          $ref: '#/definitions/models.SigninDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JwtDto'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Login to account
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user account
+      parameters:
+      - description: Signup data
+        in: body
+        name: signup
+        required: true
+        schema:
+          $ref: '#/definitions/models.SignupDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      summary: Create new account
+      tags:
+      - auth
+  /categories:
+    get:
+      description: Check if categories service is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Health check for categories service
+      tags:
+      - categories
+  /categories/find:
+    get:
+      description: Get list of categories filtered by name
+      parameters:
+      - description: Category name filter
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoriesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Find categories
+      tags:
+      - categories
+  /expense:
+    get:
+      description: Check if expense service is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Health check for expense service
+      tags:
+      - expense
+  /expense/add:
+    post:
+      consumes:
+      - application/json
+      description: Create a new expense entry
+      parameters:
+      - description: Expense data
+        in: body
+        name: expense
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddExpenseDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ExpenseEntity'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Add new expense
+      tags:
+      - expense
+  /expense/categories:
+    get:
+      description: Get summary of expenses grouped by categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ExpenseCategoriesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Get expense categories summary
+      tags:
+      - expense
+  /expense/items:
+    get:
+      description: Get list of expenses filtered by category
+      parameters:
+      - description: Category ID (UUID)
+        in: query
+        name: categoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ExpenseItemsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Get expense items by category
+      tags:
+      - expense
+  /expense/names:
+    get:
+      description: Get list of expense names filtered by name
+      parameters:
+      - description: Expense name filter
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ExpenseNamesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Get expense names
+      tags:
+      - expense
+  /user/remove:
+    get:
+      description: Delete the authenticated user's account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Account deleted
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Delete user account
+      tags:
+      - user
+  /user/remove-link:
+    get:
+      description: Delete account using the verification token from email
+      parameters:
+      - description: Verification token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "307":
+          description: Redirecting to success page
+          schema:
+            type: string
+        "404":
+          description: Invalid token
+          schema:
+            type: string
+      summary: Delete account via verification link
+      tags:
+      - user
+  /user/send-remove-link:
+    get:
+      description: Send email with account deletion link
+      parameters:
+      - description: User login
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Link sent
+          schema:
+            type: string
+        "404":
+          description: User not found
+          schema:
+            type: string
+      summary: Send account deletion link
+      tags:
+      - user
+schemes:
+- http
+- https
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

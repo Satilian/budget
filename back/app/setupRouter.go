@@ -7,6 +7,10 @@ import (
 	"back/user"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "back/docs"
 )
 
 var r = gin.Default()
@@ -15,6 +19,9 @@ func SetupRouter() *gin.Engine {
 	r.Static("/static", "./assets")
 
 	r.Use(gin.Recovery())
+
+	// Swagger documentation
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	apiGroup := r.Group("/api")
 

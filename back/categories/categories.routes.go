@@ -12,31 +12,53 @@ import (
 func AddRoutes(rg *gin.RouterGroup) {
 	rg.Use(auth.AuthRequired())
 
-	rg.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, "pong")
-	})
+	rg.GET("/", HealthCheck)
 
-	rg.GET("/find", func(c *gin.Context) {
-		claims, ok := c.Get("user")
+	rg.GET("/find", FindCategories)
+}
 
-		if !ok {
-			c.Status(http.StatusUnauthorized)
-			c.Abort()
-		}
+// HealthCheck godoc
+// @Summary Health check for categories service
+// @Description Check if categories service is running
+// @Tags categories
+// @Produce json
+// @Security Bearer
+// @Success 200 {string} string "pong"
+// @Router /categories [get]
+func HealthCheck(c *gin.Context) {
+	c.JSON(http.StatusOK, "pong")
+}
 
-		var filter models.CategoryFilter
+// FindCategories godoc
+// @Summary Find categories
+// @Description Get list of categories filtered by name
+// @Tags categories
+// @Produce json
+// @Security Bearer
+// @Param name query string false "Category name filter"
+// @Success 200 {object} models.CategoriesResponse
+// @Failure 401 {string} string "Unauthorized"
+// @Router /categories/find [get]
+func FindCategories(c *gin.Context) {
+	claims, ok := c.Get("user")
 
-		if err := c.ShouldBind(&filter); err != nil {
-			c.Error(err)
-		}
+	if !ok {
+		c.Status(http.StatusUnauthorized)
+		c.Abort()
+	}
 
-		if categories, err := findCategories(
-			claims.(*jwt.StandardClaims).Audience,
-			filter,
-		); err == nil {
-			c.JSON(http.StatusOK, gin.H{"categories": categories})
-		} else {
-			c.Error(err)
-		}
-	})
+	var filter models.CategoryFilter
+
+	if err := c.ShouldBind(&filter); err != nil {
+		c.Error(err)
+	}
+
+	if categories, err := findCategories(
+		claims.(*jwt.StandardClaims).Audience,
+		filter,
+	); err == nil {
+		c.JSON(http.StatusOK, gin.H{"categories": categories})
+	} else {
+		c.Error(err)
+	}
 }

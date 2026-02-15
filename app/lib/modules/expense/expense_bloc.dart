@@ -28,11 +28,11 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
   late StreamSubscription<List<ExpenseCategory>> categoriesSubscription;
   late StreamSubscription<List<ExpenseItem>> itemsSubscription;
 
-  _onCategoriesLoaded(event, emit) {
+  void _onCategoriesLoaded(event, emit) {
     emit(ExpenseState(categories: event.categories));
   }
 
-  _onItemsLoadStart(event, emit) {
+  void _onItemsLoadStart(event, emit) {
     emit(ExpenseState(
       categories: state.categories,
       categoryId: event.categoryId,
@@ -40,7 +40,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     expenseRepo.getItems(ExpenseItemsFilter(categoryId: event.categoryId));
   }
 
-  _onItemsLoadDone(event, emit) {
+  void _onItemsLoadDone(event, emit) {
     emit(ExpenseState(
       categories: state.categories,
       categoryId: state.categoryId,
@@ -48,7 +48,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     ));
   }
 
-  _onItemsReset(event, emit) {
+  void _onItemsReset(event, emit) {
     emit(ExpenseState(
       categories: state.categories,
       categoryId: null,

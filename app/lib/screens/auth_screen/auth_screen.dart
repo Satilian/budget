@@ -1,7 +1,7 @@
 import 'package:budget/screens/auth_screen/signup_form.dart';
 import 'package:budget/screens/screens.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:budget/l10n/app_localizations.dart';
 
 import 'signin_form.dart';
 

@@ -8,7 +8,7 @@ import (
 )
 
 func LoadEnv() {
-	file := "../.env.dev"
+	file := ".env"
 	if len(os.Args) > 1 && os.Args[1] == "prod" {
 		file = ".env"
 	}

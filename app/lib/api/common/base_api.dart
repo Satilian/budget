@@ -28,14 +28,14 @@ abstract class BaseApi {
   static bool _initialized = false;
   static AuthRepo? authRepo;
 
-  static setAccessToken(value) {
+  static void setAccessToken(value) {
     const storage = FlutterSecureStorage();
 
     storage.write(key: 'accessToken', value: value);
     BaseApi.accessToken = value;
   }
 
-  static removeAccessToken() {
+  static void removeAccessToken() {
     const storage = FlutterSecureStorage();
 
     storage.delete(key: 'accessToken');
@@ -66,7 +66,7 @@ abstract class BaseApi {
     return Uri.parse('$apiUrl$urlPart');
   }
 
-  setHeaders(
+  void setHeaders(
     HttpClientRequest request,
     Map<String, String>? appendHeaders,
   ) {
@@ -114,7 +114,7 @@ abstract class BaseApi {
       body = null;
     }
 
-    HttpClientRequest? req;
+    late final HttpClientRequest req;
     switch (method) {
       case HttpMethod.get:
         req = await client.getUrl(getUrl(url));
@@ -131,21 +131,15 @@ abstract class BaseApi {
       case HttpMethod.patch:
         req = await client.patchUrl(getUrl(url));
         break;
-      default:
-        req = null;
     }
 
     HttpClientResponse? res;
-    if (req != null) {
-      setHeaders(req, headers);
-      if (body != null) req.add(utf8.encode(body));
-      try {
-        res = await req.close();
-      } catch (e) {
-        log('request error: ${e.toString()}');
-        res = null;
-      }
-    } else {
+    setHeaders(req, headers);
+    if (body != null) req.add(utf8.encode(body));
+    try {
+      res = await req.close();
+    } catch (e) {
+      log('request error: ${e.toString()}');
       res = null;
     }
 

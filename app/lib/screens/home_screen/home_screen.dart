@@ -1,6 +1,6 @@
 import 'package:budget/modules/modules.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:budget/l10n/app_localizations.dart';
 
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';

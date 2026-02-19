@@ -8,6 +8,7 @@ import 'screens/screens.dart';
 import 'theme/theme.dart';
 
 void main() async {
+  debugPrint('Running in ${kDebugMode ? 'debug' : 'release'} mode');
   await dotenv.load(fileName: kDebugMode ? '.env.dev' : '.env');
   runApp(const MyApp());
 }

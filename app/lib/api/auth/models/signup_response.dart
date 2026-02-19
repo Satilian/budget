@@ -7,19 +7,17 @@ part 'signup_response.g.dart';
 @JsonSerializable(includeIfNull: false)
 class SignupResponse implements BaseEntity {
   final String id;
-  final String email;
+  final String accountId;
   final String login;
-  @JsonKey(name: 'created_at')
+
+  @JsonKey(name: 'created')
   final DateTime createdAt;
-  @JsonKey(name: 'updated_at')
-  final DateTime? updatedAt;
 
   const SignupResponse({
     required this.id,
-    required this.email,
+    required this.accountId,
     required this.login,
     required this.createdAt,
-    this.updatedAt,
   });
 
   factory SignupResponse.fromJson(Map<String, dynamic> json) =>

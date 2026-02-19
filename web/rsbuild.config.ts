@@ -14,8 +14,8 @@ export default defineConfig({
       },
     },
     https: {
-      key: fs.readFileSync('certificates/budget.local+4-key.pem'),
-      cert: fs.readFileSync('certificates/budget.local+4.pem'),
+      key: fs.readFileSync('certificates/budget.local+1-key.pem'),
+      cert: fs.readFileSync('certificates/budget.local+1.pem'),
     },
   },
   html: {

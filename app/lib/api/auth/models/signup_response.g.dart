@@ -9,28 +9,15 @@ part of 'signup_response.dart';
 SignupResponse _$SignupResponseFromJson(Map<String, dynamic> json) =>
     SignupResponse(
       id: json['id'] as String,
-      email: json['email'] as String,
+      accountId: json['accountId'] as String,
       login: json['login'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null
-          ? null
-          : DateTime.parse(json['updated_at'] as String),
+      createdAt: DateTime.parse(json['created'] as String),
     );
 
-Map<String, dynamic> _$SignupResponseToJson(SignupResponse instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'email': instance.email,
-    'login': instance.login,
-    'created_at': instance.createdAt.toIso8601String(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('updated_at', instance.updatedAt?.toIso8601String());
-  return val;
-}
+Map<String, dynamic> _$SignupResponseToJson(SignupResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'accountId': instance.accountId,
+      'login': instance.login,
+      'created': instance.createdAt.toIso8601String(),
+    };

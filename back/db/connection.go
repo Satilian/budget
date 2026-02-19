@@ -15,7 +15,7 @@ func NewDB() (*sql.DB, error) {
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_DBNAME"),
+		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PORT"),
 	)
 

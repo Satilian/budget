@@ -147,8 +147,9 @@ abstract class BaseApi {
       if (TRes == _voidType) {
         return resultFactory({});
       } else {
-        return resultFactory(
-            jsonDecode(await res.transform(utf8.decoder).join()));
+        final raw = await res.transform(utf8.decoder).join();
+        // debugPrint('Response: $raw');
+        return resultFactory(jsonDecode(raw));
       }
     } else {
       if (res?.statusCode == 401) {

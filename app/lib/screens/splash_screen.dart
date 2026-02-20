@@ -18,12 +18,17 @@ class SplashScreen extends StatelessWidget {
       case AuthStatus.authenticated:
         context.read<ExpenseRepo>().getCategories();
         return const HomeScreen();
-      /* case AuthStatus.unknown:
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ); */
       default:
-        return const AuthScreen();
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: Center(
+            child: Image.asset(
+              'assets/logo.png',
+              width: 225,
+              height: 225,
+            ),
+          ),
+        );
     }
   }
 }

@@ -17,16 +17,11 @@ class _TodoScreenState extends State<TodoScreen> {
   final List<TodoItem> _items = [];
 
   void _addItem(Map<String, dynamic> data) {
-    final title = (data['title'] as String?)?.trim();
-    if (title == null || title.isEmpty) {
-      return;
-    }
-
     setState(() {
       _items.add(TodoItem(
-        title: title,
-        category: data['category']?.toString().trim(),
-        description: data['description']?.toString().trim(),
+        category: data['category']?.toString().trim() ?? '',
+        expense: data['expense']?.toString().trim() ?? '',
+        value: data['value']?.toString().trim(),
       ));
     });
   }
@@ -65,7 +60,7 @@ class _TodoScreenState extends State<TodoScreen> {
               final result = await showModalBottomSheet<Map<String, dynamic>>(
                 context: context,
                 isScrollControlled: true,
-                builder: (context) => const Modal(child: TodoForm()),
+                builder: (context) => Modal(child: TodoForm()),
               );
 
               if (result != null) {

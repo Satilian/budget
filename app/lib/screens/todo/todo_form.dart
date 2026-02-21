@@ -1,9 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
+import '../../api/api.dart';
+import '../../utils/utils.dart';
+
 class TodoForm extends StatefulWidget {
-  const TodoForm({super.key});
+  TodoForm({super.key});
+
+  final expenseApi = ExpenseApi();
+  final categoriesApi = CategoriesApi();
 
   @override
   State<TodoForm> createState() => _TodoFormState();
@@ -13,15 +22,33 @@ class _TodoFormState extends State<TodoForm> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   void _onSubmit(Map<String, dynamic> val) {
-    final title = (val['title'] as String?)?.trim();
-    if (title == null || title.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Введите название задачи')),
-      );
-      return;
-    }
+    Log.s(val.toString());
 
     Navigator.pop(context, val);
+  }
+
+  FutureOr<List<String>> getCategories(String name) async {
+    if (name.isNotEmpty) {
+      var res = await widget.categoriesApi.find(CategoriesFilter(name: name));
+      if (res.isEmpty) {
+        return [name];
+      }
+      return res.map((e) => e.name).toList();
+    } else {
+      return [];
+    }
+  }
+
+  FutureOr<List<String>> getExpenseNames(String name) async {
+    if (name.isNotEmpty) {
+      var res = await widget.expenseApi.names(ExpenseNamesFilter(name: name));
+      if (res.isEmpty) {
+        return [name];
+      }
+      return res.map((e) => e.name).toList();
+    } else {
+      return [];
+    }
   }
 
   @override
@@ -32,14 +59,14 @@ class _TodoFormState extends State<TodoForm> {
           key: _formKey,
           initialValue: const {
             'category': '',
-            'title': '',
-            'description': '',
+            'expense': '',
+            'value': '',
           },
           skipDisabled: true,
           child: Column(
             children: <Widget>[
               const SizedBox(height: 10),
-              FormBuilderTextField(
+              FormBuilderTypeAhead<String>(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 name: 'category',
                 decoration: InputDecoration(
@@ -48,34 +75,44 @@ class _TodoFormState extends State<TodoForm> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                textInputAction: TextInputAction.next,
+                itemBuilder: (context, category) {
+                  return ListTile(title: Text(category));
+                },
+                controller: TextEditingController(text: ''),
+                suggestionsCallback: getCategories,
               ),
-              FormBuilderTextField(
+              FormBuilderTypeAhead<String>(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                name: 'title',
+                name: 'expense',
                 decoration: InputDecoration(
                   labelText: 'Название',
                   labelStyle: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
+                itemBuilder: (context, title) {
+                  return ListTile(title: Text(title));
+                },
+                controller: TextEditingController(text: ''),
+                suggestionsCallback: getExpenseNames,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(
                       errorText: 'Обязательное поле'),
                 ]),
-                textInputAction: TextInputAction.next,
               ),
               FormBuilderTextField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                name: 'description',
+                name: 'value',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
                 decoration: InputDecoration(
-                  labelText: 'Описание',
+                  labelText: 'Значение',
                   labelStyle: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                maxLines: 3,
-                minLines: 1,
+                keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.done,
               ),
             ],

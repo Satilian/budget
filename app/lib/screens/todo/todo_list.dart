@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class TodoItem {
-  String title;
   String? category;
-  String? description;
+  String expense;
+  String? value;
   bool isCompleted;
 
   TodoItem({
-    required this.title,
-    this.category,
-    this.description,
+    required this.category,
+    required this.expense,
+    this.value,
     this.isCompleted = false,
   });
 }
@@ -45,14 +45,14 @@ class TodoList extends StatelessWidget {
                   onChanged: (_) => onToggle(index),
                 ),
                 title: Text(
-                  item.title,
+                  item.expense,
                   style: TextStyle(
                     decoration:
                         item.isCompleted ? TextDecoration.lineThrough : null,
                     color: item.isCompleted ? Colors.grey : null,
                   ),
                 ),
-                subtitle: item.category != null || item.description != null
+                subtitle: item.category != null || item.value != null
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -62,10 +62,9 @@ class TodoList extends StatelessWidget {
                               'Категория: ${item.category}',
                               style: const TextStyle(fontSize: 12),
                             ),
-                          if (item.description != null &&
-                              item.description!.isNotEmpty)
+                          if (item.value != null && item.value!.isNotEmpty)
                             Text(
-                              item.description!,
+                              'Значение: ${item.value}',
                               style: const TextStyle(fontSize: 12),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,

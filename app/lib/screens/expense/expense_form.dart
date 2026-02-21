@@ -37,7 +37,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
     });
   }
 
-  FutureOr<List<String>> getCatogories(String name) async {
+  FutureOr<List<String>> getCategories(String name) async {
     if (name.isNotEmpty) {
       var res = await widget.categoriesApi.find(CategoriesFilter(name: name));
       if (res.isEmpty) {
@@ -89,7 +89,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   return ListTile(title: Text(country));
                 },
                 controller: TextEditingController(text: ''),
-                suggestionsCallback: getCatogories,
+                suggestionsCallback: getCategories,
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(
                       errorText: 'Обязательное поле'),

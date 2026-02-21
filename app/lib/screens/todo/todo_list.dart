@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
 
-class TodoItem {
-  String? category;
-  String expense;
-  String? value;
-  bool isCompleted;
-
-  TodoItem({
-    required this.category,
-    required this.expense,
-    this.value,
-    this.isCompleted = false,
-  });
-}
+import '../../modules/modules.dart';
 
 class TodoList extends StatelessWidget {
   final List<TodoItem> items;
-  final void Function(int) onToggle;
-  final void Function(int) onDelete;
+  final void Function(String) onToggle;
+  final void Function(String) onDelete;
 
   const TodoList({
     super.key,
@@ -42,7 +30,7 @@ class TodoList extends StatelessWidget {
               return ListTile(
                 leading: Checkbox(
                   value: item.isCompleted,
-                  onChanged: (_) => onToggle(index),
+                  onChanged: (_) => onToggle(item.id),
                 ),
                 title: Text(
                   item.expense,
@@ -74,7 +62,7 @@ class TodoList extends StatelessWidget {
                     : null,
                 trailing: IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => onDelete(index),
+                  onPressed: () => onDelete(item.id),
                 ),
               );
             },

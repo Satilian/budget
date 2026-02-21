@@ -31,6 +31,9 @@ class AppProvider extends StatelessWidget {
               expenseRepo: RepositoryProvider.of<ExpenseRepo>(context),
             ),
           ),
+          BlocProvider<TodoBloc>(
+            create: (BuildContext context) => TodoBloc(),
+          ),
         ],
         child: child,
       ),

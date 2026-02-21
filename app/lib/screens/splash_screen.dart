@@ -17,7 +17,7 @@ class SplashScreen extends StatelessWidget {
         return const AuthScreen();
       case AuthStatus.authenticated:
         context.read<ExpenseRepo>().getCategories();
-        return const HomeScreen();
+        return const MainNavigationScreen();
       default:
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,

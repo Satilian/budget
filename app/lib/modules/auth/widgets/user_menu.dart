@@ -7,35 +7,48 @@ import 'package:flutter_svg/svg.dart';
 enum UserMenuItem { remove, exit }
 
 class UserMenu extends StatelessWidget {
-  const UserMenu({super.key});
+  const UserMenu({super.key, this.title});
+
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<UserMenuItem>(
-      icon: SvgPicture.asset(
-        icons.user,
-        width: 25,
-        height: 25,
-        theme: SvgTheme(currentColor: Theme.of(context).colorScheme.primary),
-      ),
-      onSelected: (UserMenuItem item) {
-        switch (item) {
-          case UserMenuItem.exit:
-            context.read<AuthBloc>().add(AuthLogoutRequested());
+    return Row(
+      children: [
+        PopupMenuButton<UserMenuItem>(
+          icon: SvgPicture.asset(
+            icons.user,
+            width: 25,
+            height: 25,
+            theme:
+                SvgTheme(currentColor: Theme.of(context).colorScheme.primary),
+          ),
+          onSelected: (UserMenuItem item) {
+            switch (item) {
+              case UserMenuItem.exit:
+                context.read<AuthBloc>().add(AuthLogoutRequested());
 
-          case UserMenuItem.remove:
-            context.read<AuthBloc>().add(AuthRemoveRequested());
-        }
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<UserMenuItem>>[
-        const PopupMenuItem<UserMenuItem>(
-          value: UserMenuItem.remove,
-          child: Text('Удалить пользователя'),
+              case UserMenuItem.remove:
+                context.read<AuthBloc>().add(AuthRemoveRequested());
+            }
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<UserMenuItem>>[
+            const PopupMenuItem<UserMenuItem>(
+              value: UserMenuItem.remove,
+              child: Text('Удалить пользователя'),
+            ),
+            const PopupMenuItem<UserMenuItem>(
+              value: UserMenuItem.exit,
+              child: Text('Выход'),
+            ),
+          ],
         ),
-        const PopupMenuItem<UserMenuItem>(
-          value: UserMenuItem.exit,
-          child: Text('Выход'),
+        Expanded(
+          child: Center(
+            child: Text(title ?? ''),
+          ),
         ),
+        const SizedBox(width: kMinInteractiveDimension),
       ],
     );
   }

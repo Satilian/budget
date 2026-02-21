@@ -1,4 +1,4 @@
-import 'package:budget/screens/auth_screen/signup_form.dart';
+import 'package:budget/screens/auth/signup_form.dart';
 import 'package:budget/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/l10n/app_localizations.dart';

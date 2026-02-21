@@ -1,6 +1,6 @@
 import 'package:budget/modules/expense/expense.dart';
 import 'package:budget/modules/modules.dart';
-import 'package:budget/screens/home_screen/items_list.dart';
+import 'package:budget/screens/expense/items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

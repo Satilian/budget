@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import '../../constants/constants.dart' as constants;
 import '../../modules/modules.dart';
@@ -13,30 +14,10 @@ class TodoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const UserMenu(title: 'Todo'),
-      ),
+      appBar: AppBar(title: const UserMenu(title: 'Todo')),
       body: Column(
         children: [
-          Expanded(
-            child: BlocBuilder<TodoBloc, TodoState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                return TodoList(
-                  items: state.items,
-                  onToggle: (id) {
-                    context.read<TodoBloc>().add(ToggleTodo(id));
-                  },
-                  onDelete: (id) {
-                    context.read<TodoBloc>().add(DeleteTodo(id));
-                  },
-                );
-              },
-            ),
-          ),
+          Expanded(child: FormBuilder(child: TodoList())),
           AddBtn(
             label: 'Todo',
             iconSrc: constants.icons.aim,

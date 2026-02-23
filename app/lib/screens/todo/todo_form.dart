@@ -6,7 +6,6 @@ import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../api/api.dart';
-import '../../utils/utils.dart';
 
 class TodoForm extends StatefulWidget {
   TodoForm({super.key});
@@ -20,12 +19,6 @@ class TodoForm extends StatefulWidget {
 
 class _TodoFormState extends State<TodoForm> {
   final _formKey = GlobalKey<FormBuilderState>();
-
-  void _onSubmit(Map<String, dynamic> val) {
-    Log.s(val.toString());
-
-    Navigator.pop(context, val);
-  }
 
   FutureOr<List<String>> getCategories(String name) async {
     if (name.isNotEmpty) {
@@ -125,7 +118,7 @@ class _TodoFormState extends State<TodoForm> {
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState?.saveAndValidate() ?? false) {
-                  _onSubmit(_formKey.currentState!.value);
+                  Navigator.pop(context, _formKey.currentState!.value);
                 } else {
                   debugPrint(_formKey.currentState?.value.toString());
                   debugPrint('validation failed');

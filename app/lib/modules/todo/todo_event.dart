@@ -29,3 +29,13 @@ final class DeleteTodo extends TodoEvent {
 
   final String id;
 }
+
+final class UpdateTodoValue extends TodoEvent {
+  const UpdateTodoValue({
+    required this.id,
+    required this.value,
+  });
+
+  final String id;
+  final String value;
+}

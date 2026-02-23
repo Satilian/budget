@@ -15,6 +15,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<AddTodo>(_onAddTodo);
     on<ToggleTodo>(_onToggleTodo);
     on<DeleteTodo>(_onDeleteTodo);
+    on<UpdateTodoValue>(_onUpdateTodoValue);
 
     // Load todos on initialization
     add(LoadTodos());
@@ -74,6 +75,19 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   Future<void> _onDeleteTodo(DeleteTodo event, Emitter<TodoState> emit) async {
     final updatedItems =
         state.items.where((item) => item.id != event.id).toList();
+
+    emit(state.copyWith(items: updatedItems));
+    await _saveTodos(updatedItems);
+  }
+
+  Future<void> _onUpdateTodoValue(
+      UpdateTodoValue event, Emitter<TodoState> emit) async {
+    final updatedItems = state.items.map((item) {
+      if (item.id == event.id) {
+        return item.copyWith(value: event.value);
+      }
+      return item;
+    }).toList();
 
     emit(state.copyWith(items: updatedItems));
     await _saveTodos(updatedItems);

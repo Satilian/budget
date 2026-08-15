@@ -6,36 +6,56 @@ sealed class TodoEvent {
 
 final class LoadTodos extends TodoEvent {}
 
-final class AddTodo extends TodoEvent {
-  const AddTodo({
+final class AddTodoCard extends TodoEvent {}
+
+final class ToggleTodoCard extends TodoEvent {
+  const ToggleTodoCard(this.cardId);
+
+  final String cardId;
+}
+
+final class AddTodoItem extends TodoEvent {
+  const AddTodoItem({
+    required this.cardId,
     required this.category,
     required this.expense,
     required this.value,
   });
 
+  final String cardId;
   final String? category;
   final String expense;
   final String? value;
 }
 
-final class ToggleTodo extends TodoEvent {
-  const ToggleTodo(this.id);
+final class ToggleTodoItem extends TodoEvent {
+  const ToggleTodoItem({
+    required this.cardId,
+    required this.itemId,
+  });
 
-  final String id;
+  final String cardId;
+  final String itemId;
 }
 
-final class DeleteTodo extends TodoEvent {
-  const DeleteTodo(this.id);
+final class DeleteTodoItem extends TodoEvent {
+  const DeleteTodoItem({
+    required this.cardId,
+    required this.itemId,
+  });
 
-  final String id;
+  final String cardId;
+  final String itemId;
 }
 
 final class UpdateTodoValue extends TodoEvent {
   const UpdateTodoValue({
-    required this.id,
+    required this.cardId,
+    required this.itemId,
     required this.value,
   });
 
-  final String id;
+  final String cardId;
+  final String itemId;
   final String value;
 }

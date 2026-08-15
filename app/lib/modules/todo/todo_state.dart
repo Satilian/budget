@@ -2,23 +2,23 @@ part of 'todo_bloc.dart';
 
 class TodoState extends Equatable {
   const TodoState({
-    this.items = const <TodoItem>[],
+    this.cards = const <TodoCard>[],
     this.isLoading = false,
   });
 
-  final List<TodoItem> items;
+  final List<TodoCard> cards;
   final bool isLoading;
 
   TodoState copyWith({
-    List<TodoItem>? items,
+    List<TodoCard>? cards,
     bool? isLoading,
   }) {
     return TodoState(
-      items: items ?? this.items,
+      cards: cards ?? this.cards,
       isLoading: isLoading ?? this.isLoading,
     );
   }
 
   @override
-  List<Object?> get props => [items, isLoading];
+  List<Object?> get props => [cards, isLoading];
 }

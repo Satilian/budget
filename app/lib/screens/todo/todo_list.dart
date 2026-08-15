@@ -5,12 +5,21 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import '../../modules/modules.dart';
 
 class TodoList extends StatelessWidget {
-  const TodoList({super.key});
+  const TodoList({super.key, required this.cardId});
+
+  final String cardId;
 
   @override
   Widget build(BuildContext context) {
     final state = context.watch<TodoBloc>().state;
-    final items = state.items;
+    TodoCard? card;
+    for (final item in state.cards) {
+      if (item.id == cardId) {
+        card = item;
+        break;
+      }
+    }
+    final items = card?.items ?? const <TodoItem>[];
 
     return items.isEmpty
         ? const Center(
@@ -34,7 +43,10 @@ class TodoList extends StatelessWidget {
                       Checkbox(
                         value: item.isCompleted,
                         onChanged: (_) {
-                          context.read<TodoBloc>().add(ToggleTodo(item.id));
+                          context.read<TodoBloc>().add(ToggleTodoItem(
+                                cardId: cardId,
+                                itemId: item.id,
+                              ));
                         },
                       ),
                       Expanded(
@@ -82,7 +94,8 @@ class TodoList extends StatelessWidget {
                               if (newValue != item.value) {
                                 context.read<TodoBloc>().add(
                                       UpdateTodoValue(
-                                        id: item.id,
+                                        cardId: cardId,
+                                        itemId: item.id,
                                         value: newValue,
                                       ),
                                     );
@@ -92,7 +105,10 @@ class TodoList extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          context.read<TodoBloc>().add(DeleteTodo(item.id));
+                          context.read<TodoBloc>().add(DeleteTodoItem(
+                                cardId: cardId,
+                                itemId: item.id,
+                              ));
                         },
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),

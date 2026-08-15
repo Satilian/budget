@@ -100,7 +100,7 @@ class _TodoFormState extends State<TodoForm> {
                   color: Theme.of(context).primaryColor,
                 ),
                 decoration: InputDecoration(
-                  labelText: 'Значение',
+                  labelText: 'Цена',
                   labelStyle: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -137,10 +137,8 @@ class _TodoFormState extends State<TodoForm> {
                 ),
               ),
               child: Text(
-                'Добавить задачу',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
+                'Добавить',
+                style: TextStyle(color: Theme.of(context).primaryColor),
               ),
             ),
           ],

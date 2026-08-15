@@ -45,3 +45,51 @@ class TodoItem extends Equatable {
   @override
   List<Object?> get props => [id, category, expense, value, isCompleted];
 }
+
+class TodoCard extends Equatable {
+  const TodoCard({
+    required this.id,
+    this.items = const <TodoItem>[],
+    this.isExpanded = false,
+  });
+
+  final String id;
+  final List<TodoItem> items;
+  final bool isExpanded;
+
+  TodoCard copyWith({
+    String? id,
+    List<TodoItem>? items,
+    bool? isExpanded,
+  }) {
+    return TodoCard(
+      id: id ?? this.id,
+      items: items ?? this.items,
+      isExpanded: isExpanded ?? this.isExpanded,
+    );
+  }
+
+  factory TodoCard.fromJson(Map<String, dynamic> json) {
+    final rawItems = json['items'] as List<dynamic>? ?? const [];
+    final items = rawItems
+        .map((item) => TodoItem.fromJson((item as Map).cast<String, dynamic>()))
+        .toList();
+
+    return TodoCard(
+      id: json['id']?.toString() ?? '',
+      items: items,
+      isExpanded: json['isExpanded'] == true,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'items': items.map((item) => item.toJson()).toList(),
+      'isExpanded': isExpanded,
+    };
+  }
+
+  @override
+  List<Object?> get props => [id, items, isExpanded];
+}
